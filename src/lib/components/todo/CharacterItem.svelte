@@ -1,6 +1,7 @@
 <script lang="ts">
     import WorkItem from './WorkItem.svelte';
     import type { Work } from '$lib/interfaces/Work';
+    import {Card} from "flowbite-svelte";
 
     export let name: string;
     export let todo: {
@@ -10,7 +11,7 @@
 </script>
 
 <span>{ name }</span>
-<li class="character-outer">
+<Card padding="xl" size="md">
     <ul>
         {#each todo.daily as work}
             <WorkItem data={ work } />
@@ -22,7 +23,7 @@
             <WorkItem data={ work } />
         {/each}
     </ul>
-</li>
+</Card>
 
 <style>
 

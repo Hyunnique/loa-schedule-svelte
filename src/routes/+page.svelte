@@ -3,18 +3,12 @@
 	import type { Character } from "$lib/interfaces/Character";
 	//import type { Work } from "$lib/interfaces/Work";
 
-	let characters: Character[] = [];
+	import { get } from "svelte/store";
+	import { CharacterData } from "../stores/CharacterData";
 
+	let characters: Character[] = get(CharacterData);
 	function initialize() {
-		parseLocal();
-	}
 
-	function parseLocal() {
-		let data: string | null = localStorage.getItem("data");
-
-		if (data != null) {
-			characters = JSON.parse(data);
-		}
 	}
 
 	function rearrangeCharacters() {
