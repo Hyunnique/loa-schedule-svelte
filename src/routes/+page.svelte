@@ -5,9 +5,15 @@
 
 	import { get } from "svelte/store";
 	import { CharacterData } from "../stores/CharacterData";
+	import {Button, Modal, P} from "flowbite-svelte";
 
 	let characters: Character[] = get(CharacterData);
+	let createCharacterModal = false;
 	function initialize() {
+
+	}
+
+	function createNewCharacter() {
 
 	}
 
@@ -25,9 +31,16 @@
 </svelte:head>
 
 <section>
+	<Button on:click={ () => { createCharacterModal = true } }>+ 새 캐릭터 생성</Button>
 	{#each characters as _character }
 		<CharacterItem {..._character} />
 	{/each}
+
+	<Modal bind:open={ createCharacterModal } size="xs" class="w-full" outsideclose>
+		<form class="flex flex-col space-y-6" action="#">
+			
+		</form>
+	</Modal>
 </section>
 
 <style>
