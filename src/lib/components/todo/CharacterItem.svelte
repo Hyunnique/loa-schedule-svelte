@@ -44,11 +44,20 @@
         <Span class="text-gray-700 text-md">{ character.itemLevel }</Span>
     </div>
 
-    <Listgroup class="border-0 dark:!bg-transparent">
-        {#each character.todo.weekly as work, i}
-            <WorkItem bind:data={ work } onDestroy={ () => { character.todo.weekly.splice(i, 1); character = character; } } />
-        {/each}
-    </Listgroup>
+    {#if character.todo.daily.length > 0 }
+        <Listgroup class="border-2 dark:!bg-transparent">
+            {#each character.todo.daily as work, i}
+                <WorkItem bind:data={ work } onDestroy={ () => { character.todo.daily.splice(i, 1); character = character; } } />
+            {/each}
+        </Listgroup>
+    {/if}
+    {#if character.todo.weekly.length > 0 }
+        <Listgroup class="border-2 dark:!bg-transparent">
+            {#each character.todo.weekly as work, i}
+                <WorkItem bind:data={ work } onDestroy={ () => { character.todo.weekly.splice(i, 1); character = character; } } />
+            {/each}
+        </Listgroup>
+    {/if}
     <!--
     <Card class="grid">
         {#each character.todo.weekly as work, i}
