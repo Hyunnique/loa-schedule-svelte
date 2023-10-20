@@ -5,7 +5,7 @@
 
 </script>
 
-<div class="flex justify-between gap-2 w-full h-4">
+<div class="flex justify-between gap-2 w-full h-3 mb-1">
     {#each breakpoints as breakpoint, i}
         <button class="w-full h-full rounded-sm cursor-pointer"
                 class:bg-purple-500={breakpoint.done}

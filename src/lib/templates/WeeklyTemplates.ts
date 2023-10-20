@@ -1,6 +1,7 @@
 export default [
 	{
 		name: '카멘 하드',
+		id: 'kamen.hard',
 		breakpoints: [
 			{
 				itemLevelMin: 1630,
@@ -38,6 +39,7 @@ export default [
 	},
 	{
 		name: '카멘 노말',
+		id: 'kamen.normal',
 		breakpoints: [
 			{
 				itemLevelMin: 1610,
@@ -67,6 +69,7 @@ export default [
 	},
 	{
 		name: '상아탑 하드',
+		id: 'tower.hard',
 		breakpoints: [
 			{
 				itemLevelMin: 1620,
@@ -104,6 +107,7 @@ export default [
 	},
 	{
 		name: '상아탑 노말',
+		id: 'tower.normal',
 		breakpoints: [
 			{
 				itemLevelMin: 1600,
@@ -141,6 +145,7 @@ export default [
 	},
 	{
 		name: '일리아칸 하드',
+		id: 'akan.hard',
 		breakpoints: [
 			{
 				itemLevelMin: 1600,
@@ -170,6 +175,7 @@ export default [
 	},
 	{
 		name: '일리아칸 노말',
+		id: 'akan.normal',
 		breakpoints: [
 			{
 				itemLevelMin: 1580,

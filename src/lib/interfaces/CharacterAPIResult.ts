@@ -1,9 +1,9 @@
 interface CharacterAPIResult {
 	CharacterClassName: string;
-	CharacterLevel: number;
+	CharacterLevel: string;
 	CharacterName: string;
-	ItemAvgLevel: number;
-	ItemMaxLevel: number;
+	ItemAvgLevel: string;
+	ItemMaxLevel: string;
 	ServerName: string;
 }
 

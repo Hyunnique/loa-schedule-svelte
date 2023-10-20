@@ -7,7 +7,12 @@
 
 	import { get } from "svelte/store";
 	import { CharacterData } from "../stores/CharacterData";
+	import { OverallData } from "../stores/OverallData";
+
 	import {Button, Input, Modal, P } from "flowbite-svelte";
+    import WeeklyTemplates from "$lib/templates/WeeklyTemplates";
+    import type {BreakpointTemplate} from "$lib/interfaces/BreakpointTemplate";
+    import type {Work} from "$lib/interfaces/Work";
 
 	let characters: Character[] = get(CharacterData);
 
@@ -15,8 +20,19 @@
 	let createCharacterName: string = "";
 
 	$: CharacterData.set(characters);
+	$: totalEarnedGold = function() {
+		let result: number = 0;
 
-	console.log(characters);
+		for (let character of characters) {
+			for (let todo of character.todo.weekly) {
+				for (let breakpoint of todo.breakpoints) {
+					if (breakpoint.done) result += breakpoint.gold;
+				}
+			}
+		}
+
+		return result;
+	}
 
 	onMount(async () => {
 		if (characters.length == 0) {
@@ -40,27 +56,53 @@
 			if (mainCharacterResult == undefined) return;
 			else mainServer = mainCharacterResult.ServerName;
 
-			console.debug("Main Server = " + mainServer);
+			console.log("Main Server = " + mainServer);
+
 			result.sort((o1: CharacterAPIResult, o2: CharacterAPIResult) => {
 				if (o1.ServerName == o2.ServerName) {
-					return o1.ItemMaxLevel - o2.ItemMaxLevel;
+					return o1.ItemMaxLevel > o2.ItemMaxLevel ? -1 : 1;
 				} else {
 					if (o1.ServerName == mainServer) {
+						return -1;
+					}
+					else if (o2.ServerName == mainServer) {
 						return 1;
-					} else {
+					}
+					else {
 						return o1.ServerName < o2.ServerName ? -1 : 1;
 					}
 				}
 			});
 
-			console.log(result);
 			for (let character of result) {
+                let availableTemplates =
+                    WeeklyTemplates.filter((x) => {
+                        return x.breakpoints[0].itemLevelMin <= parseFloat(character.ItemMaxLevel.replace(/,/g, ''))
+                    });
+                let recommendedTemplates: Work[] = [];
+
+                for (let template of availableTemplates) {
+					if (recommendedTemplates.length >= 3) break;
+                    if (recommendedTemplates.findIndex((x) => x.id.split('.')[0] == template.id.split('.')[0]) > -1) continue;
+                    recommendedTemplates.push({
+                        ...template,
+                        breakpoints: template.breakpoints.map(e => {
+                            return {
+                                ...e,
+                                done: false
+                            }
+                        })
+                    });
+                }
+
 				characters.push({
 					name: character.CharacterName,
-					itemLevel: character.ItemMaxLevel,
+					itemLevel: parseFloat(character.ItemMaxLevel.replace(/,/g, '')),
+					className: character.CharacterClassName,
+					serverName: character.ServerName,
 					todo: {
 						daily: [],
-						weekly: []
+						weekly: recommendedTemplates
 					}
 				});
 			}
@@ -71,8 +113,10 @@
 
 	function createNewCharacter() {
 		characters.push({
-			itemLevel: 0,
 			name: createCharacterName,
+			itemLevel: 0,
+			className: "",
+			serverName: "",
 			todo: {
 				daily: [],
 				weekly: []
@@ -96,10 +140,15 @@
 </svelte:head>
 
 <section>
+	총 흭득한 주간 골드 : { totalEarnedGold() }
 	<Button on:click={ () => { createCharacterModal = true } }>+ 새 캐릭터 생성</Button>
+
+	<div class="character-grid grid gap-4">
 	{#each characters as _character }
-		<CharacterItem name={ _character.name } bind:todo={ _character.todo } />
+		<CharacterItem bind:character={ _character } />
 	{/each}
+	</div>
+
 
 	<Modal bind:open={ createCharacterModal } size="xs" class="w-full" outsideclose>
 		<form class="flex flex-col space-y-6" action="#">
@@ -111,5 +160,27 @@
 </section>
 
 <style>
+	@media (min-width: 300px) {
+		.character-grid { grid-template-columns: repeat(1, 1fr); }
+	}
 
+	@media (min-width: 600px) {
+		.character-grid { grid-template-columns: repeat(2, 1fr); }
+	}
+
+	@media (min-width: 900px) {
+		.character-grid { grid-template-columns: repeat(3, 1fr); }
+	}
+
+	@media (min-width: 1200px) {
+		.character-grid { grid-template-columns: repeat(4, 1fr); }
+	}
+
+	@media (min-width: 1500px) {
+		.character-grid { grid-template-columns: repeat(5, 1fr); }
+	}
+
+	@media (min-width: 1800px) {
+		.character-grid { grid-template-columns: repeat(6, 1fr); }
+	}
 </style>

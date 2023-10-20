@@ -3,6 +3,10 @@
 	src: url('$lib/fonts/MaterialSymbolsRounded.woff2');
 }
 
+body {
+	letter-spacing: -0.04rem;
+}
+
 .material-symbols {
 	font-family: 'Material Symbols Rounded', sans-serif;
 	font-weight: normal;

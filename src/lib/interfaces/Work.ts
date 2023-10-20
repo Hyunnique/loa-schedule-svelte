@@ -2,6 +2,7 @@ import type { Breakpoint } from '$lib/interfaces/Breakpoint';
 
 interface Work {
 	name: string;
+	id: string;
 	breakpoints: Breakpoint[];
 	//currentCount: number;
 	//maxCount: number;
