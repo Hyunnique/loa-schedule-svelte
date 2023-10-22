@@ -79,6 +79,7 @@
                     WeeklyTemplates.filter((x) => {
                         return x.breakpoints[0].itemLevelMin <= parseFloat(character.ItemMaxLevel.replace(/,/g, ''))
                     });
+
                 let recommendedTemplates: Work[] = [];
 
                 for (let template of availableTemplates) {
@@ -95,6 +96,14 @@
                     });
                 }
 
+				// 관문 별 입장 아이템레벨이 다를 경우 아랫 난이도 탐색
+				for (let work of recommendedTemplates) {
+					for (let breakpoint of work.breakpoints) {
+
+					}
+				}
+
+
 				characters.push({
 					name: character.CharacterName,
 					itemLevel: parseFloat(character.ItemMaxLevel.replace(/,/g, '')),
@@ -109,6 +118,10 @@
 
 			characters = characters;
 		});
+	}
+
+	function createWork(type: string, ) {
+
 	}
 
 	function createNewCharacter() {
@@ -144,8 +157,8 @@
 	<Button on:click={ () => { createCharacterModal = true } }>+ 새 캐릭터 생성</Button>
 
 	<div class="character-grid grid gap-4">
-	{#each characters as _character }
-		<CharacterItem bind:character={ _character } />
+	{#each characters as _character, i }
+		<CharacterItem bind:character={ _character } onDestroy={ () => { characters.splice(i, 1); characters = characters; } } />
 	{/each}
 	</div>
 
