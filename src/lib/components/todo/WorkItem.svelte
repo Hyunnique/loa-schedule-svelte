@@ -48,11 +48,11 @@
 
     <BreakpointBar bind:breakpoints={ data.breakpoints } />
 
-    <div class="w-full text-right">
+    <div class="w-full text-right mb-1">
         <ButtonGroup class="h-2">
-            <Button class="p-2"><ExpandOutline class="w-3 h-3 select-none" /></Button>
-            <Button class="p-2"><EditOutline class="w-3 h-3 select-none" /></Button>
-            <Button class="p-2" on:click={ onDestroy }><CloseOutline class="w-2.5 h-2.5 select-none" /></Button>
+            <Button class="p-3"><ExpandOutline class="w-3 h-3 select-none" /></Button>
+            <Button class="p-3"><EditOutline class="w-3 h-3 select-none" /></Button>
+            <Button class="p-3" on:click={ onDestroy }><CloseOutline class="w-2.5 h-2.5 select-none" /></Button>
         </ButtonGroup>
     </div>
 </ListgroupItem>

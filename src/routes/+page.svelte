@@ -45,7 +45,7 @@
 			method: "GET",
 			headers: {
 				"accept": "application/json",
-				"authorization": "bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IktYMk40TkRDSTJ5NTA5NWpjTWk5TllqY2lyZyIsImtpZCI6IktYMk40TkRDSTJ5NTA5NWpjTWk5TllqY2lyZyJ9.eyJpc3MiOiJodHRwczovL2x1ZHkuZ2FtZS5vbnN0b3ZlLmNvbSIsImF1ZCI6Imh0dHBzOi8vbHVkeS5nYW1lLm9uc3RvdmUuY29tL3Jlc291cmNlcyIsImNsaWVudF9pZCI6IjEwMDAwMDAwMDAwMzI3NjYifQ.pquvBL9ZqaXZXt5Ep0ZdDi1TFOAE96r4IjrXGOooEKE6PYGT9IVmyalNkzhAv9edAkI8YWiVaF1CUbkVLWJmclVmgu-L_5ouaD9ZvuhG6tAaps_bTgRVJoF4csj3u9yzlK-bm8fiUCFT8_T_q5ONevb0P4etYuDevQKNoenYoFsiRL7GidSWmGJCPkBUpe88WlwiB8BlNTppbEad3GoSx6wtAANtDtmb7l65dYZzb2TQ5E-_YvKTnpwz9FikRyinhrKfNfZ1dBeuEAxJ0ngromB8UNyZsIUeX473BxkxQpAWzmFJPBPYVXOuxO6X3ud24YhS6hEt6lMPUqjFescgxQ"
+				"authorization": "bearer " + import.meta.env.VITE_LOSTARK_API_KEY
 			}
 		})
 		.then(response => response.json())
@@ -161,7 +161,6 @@
 		<CharacterItem bind:character={ _character } onDestroy={ () => { characters.splice(i, 1); characters = characters; } } />
 	{/each}
 	</div>
-
 
 	<Modal bind:open={ createCharacterModal } size="xs" class="w-full" outsideclose>
 		<form class="flex flex-col space-y-6" action="#">
