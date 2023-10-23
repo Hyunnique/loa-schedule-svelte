@@ -1,3 +1,5 @@
+import { BreakpointTodo } from '$lib/classes/BreakpointTodo';
+
 export default [
 	{
 		name: '카멘 하드',
@@ -368,5 +370,5 @@ export default [
 				resetPeriod: 7
 			}
 		]
-	},
+	}
 ];

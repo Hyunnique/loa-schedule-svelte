@@ -1,4 +1,13 @@
-class Breakpoint {
+interface Params {
+	itemLevelMin: number;
+	itemLevelComfort: number;
+	gold: number;
+	estimatedTimeMin: number;
+	estimatedTimeComfort: number;
+	resetPeriod: number;
+}
+
+export class Breakpoint {
 	itemLevelMin: number;
 	itemLevelComfort: number;
 	gold: number;
@@ -8,14 +17,14 @@ class Breakpoint {
 	done: boolean;
 	disabled: number; // 0 : not disabled, 1: disabled until next reset, 2: disabled permanently
 
-	constructor(
-		itemLevelMin: number,
-		itemLevelComfort: number,
-		gold: number,
-		estimatedTimeMin: number,
-		estimatedTimeComfort: number,
-		resetPeriod: number
-	) {
+	constructor({
+		itemLevelMin,
+		itemLevelComfort,
+		gold,
+		estimatedTimeMin,
+		estimatedTimeComfort,
+		resetPeriod
+	}: Params) {
 		this.itemLevelMin = itemLevelMin;
 		this.itemLevelComfort = itemLevelComfort;
 		this.gold = gold;
@@ -27,5 +36,3 @@ class Breakpoint {
 		this.disabled = 0;
 	}
 }
-
-export { Breakpoint };

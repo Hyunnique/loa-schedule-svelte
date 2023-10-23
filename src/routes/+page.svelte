@@ -1,18 +1,23 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { get } from "svelte/store";
+
+	import { Character } from "$lib/classes/Character";
+	import { Todo } from "$lib/classes/Todo";
+	import { BreakpointTodo } from "$lib/classes/BreakpointTodo";
+
 	import CharacterItem from '$lib/components/todo/CharacterItem.svelte';
-	import type { Character } from "$lib/interfaces/Character";
+
 	import type { CharacterAPIResult } from "$lib/interfaces/CharacterAPIResult";
 	//import type { Work } from "$lib/interfaces/Work";
 
-	import { get } from "svelte/store";
 	import { CharacterData } from "../stores/CharacterData";
 	import { OverallData } from "../stores/OverallData";
 
 	import {Button, Input, Modal, P } from "flowbite-svelte";
+	import DailyTemplates from "$lib/templates/DailyTemplates";
     import WeeklyTemplates from "$lib/templates/WeeklyTemplates";
-    import type {BreakpointTemplate} from "$lib/interfaces/BreakpointTemplate";
-    import type {Work} from "$lib/interfaces/Work";
+	import {Breakpoint} from "$lib/classes/Breakpoint";
 
 	let characters: Character[] = get(CharacterData);
 
@@ -20,13 +25,18 @@
 	let createCharacterName: string = "";
 
 	$: CharacterData.set(characters);
+
 	$: totalEarnedGold = function() {
 		let result: number = 0;
 
 		for (let character of characters) {
-			for (let todo of character.todo.weekly) {
-				for (let breakpoint of todo.breakpoints) {
-					if (breakpoint.done) result += breakpoint.gold;
+			for (let todoGroup of character.todoGroups) {
+				for (let todo of todoGroup) {
+					if (todo instanceof BreakpointTodo) {
+						for (let breakpoint of todo.breakpoints) {
+							if (breakpoint.done) result += breakpoint.gold;
+						}
+					}
 				}
 			}
 		}
@@ -45,7 +55,7 @@
 			method: "GET",
 			headers: {
 				"accept": "application/json",
-				"authorization": "bearer " + import.meta.env.VITE_LOSTARK_API_KEY
+				"authorization": "bearer " + import.meta.env.VITE_LOSTARK_API_KEY // 임시로 사용하고 Backend 개발시 넘기기
 			}
 		})
 		.then(response => response.json())
@@ -80,61 +90,51 @@
                         return x.breakpoints[0].itemLevelMin <= parseFloat(character.ItemMaxLevel.replace(/,/g, ''))
                     });
 
-                let recommendedTemplates: Work[] = [];
+                let recommendedTemplates: Todo[] = [];
 
                 for (let template of availableTemplates) {
 					if (recommendedTemplates.length >= 3) break;
                     if (recommendedTemplates.findIndex((x) => x.id.split('.')[0] == template.id.split('.')[0]) > -1) continue;
-                    recommendedTemplates.push({
-                        ...template,
-                        breakpoints: template.breakpoints.map(e => {
-                            return {
-                                ...e,
-                                done: false
-                            }
-                        })
-                    });
+					recommendedTemplates.push(new BreakpointTodo({
+						name: template.name,
+						id: template.id,
+						breakpoints: template.breakpoints.map(e => {
+							return new Breakpoint(e);
+						})
+					}));
                 }
 
-				// 관문 별 입장 아이템레벨이 다를 경우 아랫 난이도 탐색
-				for (let work of recommendedTemplates) {
-					for (let breakpoint of work.breakpoints) {
+				// TODO: 관문 별 입장 아이템레벨이 다를 경우 아랫 난이도 탐색
 
-					}
+
+				let dailys: Todo[] = [];
+
+				for (let template of DailyTemplates) {
+					dailys.push(new BreakpointTodo({
+						name: template.name,
+						id: template.id,
+						breakpoints: []
+					}));
 				}
 
-
-				characters.push({
+				let characterObj: Character = new Character({
 					name: character.CharacterName,
 					itemLevel: parseFloat(character.ItemMaxLevel.replace(/,/g, '')),
 					className: character.CharacterClassName,
-					serverName: character.ServerName,
-					todo: {
-						daily: [],
-						weekly: recommendedTemplates
-					}
+					serverName: character.ServerName
 				});
+
+				characterObj.todoGroups.push(dailys);
+				characterObj.todoGroups.push(recommendedTemplates);
+				characters.push(characterObj);
 			}
 
 			characters = characters;
 		});
 	}
 
-	function createWork(type: string, ) {
-
-	}
-
 	function createNewCharacter() {
-		characters.push({
-			name: createCharacterName,
-			itemLevel: 0,
-			className: "",
-			serverName: "",
-			todo: {
-				daily: [],
-				weekly: []
-			}
-		});
+		// TODO: create Character
 
 		characters = characters;
 
