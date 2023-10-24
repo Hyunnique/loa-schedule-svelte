@@ -1,23 +1,20 @@
 <script lang="ts">
-    import {Button, ButtonGroup, Checkbox, ListgroupItem, P, Span} from "flowbite-svelte";
-    import { CheckOutline, CloseOutline, DatabaseOutline, EditOutline, ExpandOutline } from "flowbite-svelte-icons";
     import { createEventDispatcher } from "svelte";
+    import {A, Checkbox, ListgroupItem, P, Span} from "flowbite-svelte";
+    import { CheckOutline, DatabaseOutline } from "flowbite-svelte-icons";
 
     import type { Todo } from "$lib/classes/Todo";
     import type { Breakpoint } from "$lib/classes/Breakpoint";
 
     import BreakpointBar from "$lib/components/ui/BreakpointBar.svelte";
-    import type {BreakpointTodo} from "$lib/classes/BreakpointTodo";
+    import type { BreakpointTodo } from "$lib/classes/BreakpointTodo";
 
-    export let data: Todo;
-
-    let workType: number = 1; // 0: Simple, 1: Breakpoints, 2: BonusGauge
-    let expanded: boolean = true;
+    export let data: BreakpointTodo;
 
     const dispatcher = createEventDispatcher();
 
     $: gold = sumGold(data.breakpoints);
-    $: simpleChecked = gold == 0;
+    $: simpleChecked = gold == 0; // 이렇게 하지 말고 Child:onchange에서 0 or all일 경우 핸들링
 
     function sumGold(breakpoints: Breakpoint[]) {
         let result: number = 0;
@@ -41,11 +38,13 @@
 
     <!-- TODO: TodoItem 별 Utility Button을 삭제하고, Expand -> Item name on:click / 나머지 -> Character Edit mode 활성화시 일괄 적용으로 변경 -->
     <div
-            class="flex justify-between mb-2 items-center"
-            class:order-1={ !expanded }
-            class:order-3={ expanded }
+            class="flex justify-between items-center"
+            class:order-1={ !data.expanded }
+            class:order-3={ data.expanded }
     >
-        <P class="order-0 text-left font-bold text-md">{ data.name }</P>
+        <P class="order-0 text-left font-bold text-md">
+            <A class="text-black dark:text-white hover:no-underline" on:click={ () => { data.expanded = !data.expanded; } }>{ data.name }</A>
+        </P>
 
         <P
                 class="flex items-center gap-1 text-right font-bold text-md"
@@ -54,30 +53,22 @@
                 <DatabaseOutline class="inline-block w-2.5 h-2.5 text-yellow-400 dark:text-yellow-200" />
                 <Span class="text-yellow-400 dark:text-yellow-200">{ gold }</Span>
             {:else}
-                {#if expanded}
+                {#if data.expanded}
                     <CheckOutline class="inline-block w-4 h-4 text-green-400 dark:text-green-200" />
                 {/if}
             {/if}
         </P>
 
-        {#if !expanded}
+        {#if !data.expanded}
             <Checkbox class="order-2 w-5 h-5" style="background-size: 0.8rem 0.8rem;" bind:checked={ simpleChecked } />
         {/if}
+
+
     </div>
 
-    {#if expanded && data.breakpoints.length > 0}
+    {#if data.expanded}
         <BreakpointBar bind:breakpoints={ data.breakpoints } />
     {/if}
-
-    <!--
-    <div class="w-full text-right mb-1">
-        <ButtonGroup class="h-2">
-            <Button class="p-3" on:click={ () => { expanded = !expanded; } }><ExpandOutline class="w-3 h-3 select-none" /></Button>
-            <Button class="p-3"><EditOutline class="w-3 h-3 select-none" /></Button>
-            <Button class="p-3" on:click={ () => { dispatcher("destroy") } }><CloseOutline class="w-2.5 h-2.5 select-none" /></Button>
-        </ButtonGroup>
-    </div>
-    -->
 </ListgroupItem>
 
 <style>

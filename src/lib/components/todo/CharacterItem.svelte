@@ -1,10 +1,14 @@
 <script lang="ts">
-    import { Character } from "$lib/classes/Character";
-    import { Todo } from "$lib/classes/Todo";
+    import type { Character } from "$lib/classes/Character";
+    import type { Todo } from "$lib/classes/Todo";
+
     import {Avatar, Button, ButtonGroup, Card, Listgroup, P, Span} from "flowbite-svelte";
     import WeeklyTemplates from "$lib/templates/WeeklyTemplates";
     import {CloseOutline, EditOutline, ExpandOutline} from "flowbite-svelte-icons";
-    import TodoItem from "$lib/components/todo/TodoItem.svelte";
+    import BreakpointTodoItem from "$lib/components/todo/BreakpointTodoItem.svelte";
+    import {BreakpointTodo} from "$lib/classes/BreakpointTodo";
+    import BonusGaugeTodoItem from "$lib/components/todo/BonusGaugeTodoItem.svelte";
+    import {BonusGaugeTodo} from "$lib/classes/BonusGaugeTodo";
 
     export let character: Character;
     export let onDestroy: () => void;
@@ -31,7 +35,11 @@
             {#if todo.length > 0 }
                 <Listgroup class="border-2 dark:!bg-transparent">
                     {#each todo as work, i}
-                        <TodoItem bind:data={ work } on:destroy={ () => { todo.splice(i, 1); character = character; } } />
+                        {#if work instanceof BreakpointTodo}
+                            <BreakpointTodoItem bind:data={ work } on:destroy={ () => { todo.splice(i, 1); character = character; } } />
+                        {:else if work instanceof BonusGaugeTodo}
+                            <BonusGaugeTodoItem bind:data={ work } on:destroy={ () => { todo.splice(i, 1); character = character; } } />
+                        {/if}
                     {/each}
                 </Listgroup>
             {/if}

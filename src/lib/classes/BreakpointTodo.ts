@@ -7,6 +7,7 @@ interface Params {
 	breakpoints: Breakpoint[];
 }
 export class BreakpointTodo extends Todo {
+	type: 'Default' | 'Breakpoint' | 'Bonus' = 'Breakpoint';
 	breakpoints: Breakpoint[];
 	constructor({ name, id, breakpoints }: Params) {
 		super({ name, id });

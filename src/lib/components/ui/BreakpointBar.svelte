@@ -2,28 +2,25 @@
     import type { Breakpoint } from "$lib/classes/Breakpoint";
 
     export let breakpoints: Breakpoint[];
-
 </script>
 
-<div class="flex justify-between gap-2 w-full h-4 mb-2 mt-1">
+<div class="flex justify-between gap-2 w-full h-4 mb-1 mt-1">
     {#each breakpoints as breakpoint, i}
-        <button class="w-full h-full rounded-sm cursor-pointer"
-                class:bg-purple-700={breakpoint.done}
-                class:dark:bg-purple-400={breakpoint.done}
-                class:bg-gray-200={!breakpoint.done}
-                class:dark:bg-gray-700={!breakpoint.done}
+        <button class="w-full h-full rounded-sm border-2 { breakpoint.borderColor } { breakpoint.borderColorDark }
+                    { breakpoint.done ? breakpoint.bgColor : 'bg-white' }
+                    { breakpoint.done ? breakpoint.bgColorDark : 'dark:bg-gray-600' }"
                 on:click={ () => {
                     if (breakpoints[i].done) {
                         for (let idx = i; idx < breakpoints.length; idx++) {
-                            breakpoints[idx].done = false;
+                            if (breakpoints[i].resetPeriod === breakpoints[idx].resetPeriod) breakpoints[idx].done = false;
                         }
                     } else {
                         for (let idx = 0; idx <= i; idx++) {
-                            breakpoints[idx].done = true;
+                            if (breakpoints[i].resetPeriod === breakpoints[idx].resetPeriod) breakpoints[idx].done = true;
                         }
 
                         for (let idx = i + 1; idx < breakpoints.length; idx++) {
-                            breakpoints[idx].done = false;
+                            if (breakpoints[i].resetPeriod === breakpoints[idx].resetPeriod) breakpoints[idx].done = false;
                         }
                     }
                 } }></button>

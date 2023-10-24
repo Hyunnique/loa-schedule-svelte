@@ -3,8 +3,9 @@
 	import { get } from "svelte/store";
 
 	import { Character } from "$lib/classes/Character";
-	import { Todo } from "$lib/classes/Todo";
+	import type { Todo } from "$lib/classes/Todo";
 	import { BreakpointTodo } from "$lib/classes/BreakpointTodo";
+	import { BonusGaugeTodo } from "$lib/classes/BonusGaugeTodo";
 
 	import CharacterItem from '$lib/components/todo/CharacterItem.svelte';
 
@@ -32,8 +33,9 @@
 		for (let character of characters) {
 			for (let todoGroup of character.todoGroups) {
 				for (let todo of todoGroup) {
-					if (todo instanceof BreakpointTodo) {
-						for (let breakpoint of todo.breakpoints) {
+					if (todo.type === "Breakpoint") {
+						let sTodo: BreakpointTodo = todo as BreakpointTodo;
+						for (let breakpoint of sTodo.breakpoints) {
 							if (breakpoint.done) result += breakpoint.gold;
 						}
 					}
@@ -68,6 +70,7 @@
 
 			console.log("Main Server = " + mainServer);
 
+			// 메인 서버 -> 아이템 레벨 순으로 정렬
 			result.sort((o1: CharacterAPIResult, o2: CharacterAPIResult) => {
 				if (o1.ServerName == o2.ServerName) {
 					return o1.ItemMaxLevel > o2.ItemMaxLevel ? -1 : 1;
@@ -85,9 +88,11 @@
 			});
 
 			for (let character of result) {
+				let itemLevel: number = parseFloat(character.ItemMaxLevel.replace(/,/g, ''));
+				// 기본 주간 템플릿 추가
                 let availableTemplates =
                     WeeklyTemplates.filter((x) => {
-                        return x.breakpoints[0].itemLevelMin <= parseFloat(character.ItemMaxLevel.replace(/,/g, ''))
+                        return x.breakpoints[0].itemLevelMin <= itemLevel
                     });
 
                 let recommendedTemplates: Todo[] = [];
@@ -95,31 +100,54 @@
                 for (let template of availableTemplates) {
 					if (recommendedTemplates.length >= 3) break;
                     if (recommendedTemplates.findIndex((x) => x.id.split('.')[0] == template.id.split('.')[0]) > -1) continue;
+
+					let templateBuilder = template.breakpoints.map(e => {
+						return new Breakpoint({
+							...e,
+							id: template.id
+						});
+					});
+
+					// TODO: 아랫 난이도 탐색 (임시) -> 추후 직접 수정으로 변경
+					for (let i = templateBuilder.length - 1; i >= 0; i--) {
+						if (templateBuilder[i].itemLevelMin > itemLevel) {
+							let tryDiff: string[] = templateBuilder[i].id.split('.');
+
+							if (tryDiff.length > 1) {
+								let easier: number = WeeklyTemplates.findIndex(x => x.id === tryDiff[0] + ".normal");
+
+								if (easier !== -1) {
+									templateBuilder[i] = new Breakpoint({
+										...(WeeklyTemplates[easier].breakpoints[i]),
+										id: tryDiff[0] + ".normal"
+									});
+								} else {
+									templateBuilder.splice(i, 1);
+								}
+							}
+						}
+					}
+
 					recommendedTemplates.push(new BreakpointTodo({
 						name: template.name,
 						id: template.id,
-						breakpoints: template.breakpoints.map(e => {
-							return new Breakpoint(e);
-						})
+						breakpoints: templateBuilder
 					}));
                 }
-
-				// TODO: 관문 별 입장 아이템레벨이 다를 경우 아랫 난이도 탐색
-
 
 				let dailys: Todo[] = [];
 
 				for (let template of DailyTemplates) {
-					dailys.push(new BreakpointTodo({
+					dailys.push(new BonusGaugeTodo({
 						name: template.name,
 						id: template.id,
-						breakpoints: []
+						maxCount: template.maxCount
 					}));
 				}
 
 				let characterObj: Character = new Character({
 					name: character.CharacterName,
-					itemLevel: parseFloat(character.ItemMaxLevel.replace(/,/g, '')),
+					itemLevel: itemLevel,
 					className: character.CharacterClassName,
 					serverName: character.ServerName
 				});
