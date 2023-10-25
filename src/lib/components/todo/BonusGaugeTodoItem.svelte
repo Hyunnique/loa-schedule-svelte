@@ -17,7 +17,7 @@
 </script>
 
 <ListgroupItem class="p-0">
-    <button class="w-full h-full p-3 hover:bg-gray-50 cursor-pointer" on:click={ () => { data.expanded = !data.expanded; } }>
+    <button class="w-full h-full p-3 hover:bg-gray-50 dark:hover:bg-gray-50 dark:hover:bg-opacity-10 cursor-pointer" on:click={ () => { data.expanded = !data.expanded; } }>
         <div class="flex justify-between items-center { data.expanded ? 'order-3' : 'order-1' }">
             <div class="order-0 text-left font-bold text-md { editMode ? '' : 'flex gap-2 items-center' }">
                 <P class="order-0 text-left font-bold text-md">{ data.name }</P>
