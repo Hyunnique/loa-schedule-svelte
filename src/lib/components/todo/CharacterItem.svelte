@@ -13,6 +13,7 @@
     export let character: Character;
     export let onDestroy: () => void;
 
+    let editMode = false;
 </script>
 
 <Card size="md" class="relative flex-col inline-block w-1/7 h-full !p-4">
@@ -36,9 +37,9 @@
                 <Listgroup class="border-2 dark:!bg-transparent">
                     {#each todo as work, i}
                         {#if work instanceof BreakpointTodo}
-                            <BreakpointTodoItem bind:data={ work } on:destroy={ () => { todo.splice(i, 1); character = character; } } />
+                            <BreakpointTodoItem editMode={ editMode } bind:data={ work } on:destroy={ () => { todo.splice(i, 1); character = character; } } />
                         {:else if work instanceof BonusGaugeTodo}
-                            <BonusGaugeTodoItem bind:data={ work } on:destroy={ () => { todo.splice(i, 1); character = character; } } />
+                            <BonusGaugeTodoItem editMode={ editMode } bind:data={ work } on:destroy={ () => { todo.splice(i, 1); character = character; } } />
                         {/if}
                     {/each}
                 </Listgroup>
@@ -48,7 +49,7 @@
 
     <div class="w-full text-right mt-2">
         <ButtonGroup class="h-6">
-            <Button class="p-3"><EditOutline class="w-4 h-4 select-none" /></Button>
+            <Button class="p-3" on:click={ () => { editMode = !editMode; } }><EditOutline class="w-4 h-4 select-none" /></Button>
             <Button class="p-3" on:click={ onDestroy }><CloseOutline class="w-3 h-3 select-none" /></Button>
         </ButtonGroup>
     </div>

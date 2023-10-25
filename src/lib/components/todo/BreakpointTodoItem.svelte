@@ -10,6 +10,7 @@
     import type { BreakpointTodo } from "$lib/classes/BreakpointTodo";
 
     export let data: BreakpointTodo;
+    export let editMode: boolean;
 
     const dispatcher = createEventDispatcher();
 
