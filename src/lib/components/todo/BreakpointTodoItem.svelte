@@ -15,7 +15,7 @@
     const dispatcher = createEventDispatcher();
 
     $: gold = sumGold(data.breakpoints);
-    $: simpleChecked = gold == 0; // 이렇게 하지 말고 Child:onchange에서 0 or all일 경우 핸들링
+    $: simpleChecked = gold === 0; // 이렇게 하지 말고 Child:onchange에서 0 or all일 경우 핸들링
 
     function sumGold(breakpoints: Breakpoint[]) {
         let result: number = 0;
@@ -29,47 +29,50 @@
     }
 </script>
 
-<ListgroupItem>
-    <!--
-    Buttons: Expand, Edit, Delete
-    Expand: 진행 여부를 체크박스 하나로 표시할 것인지 / 관문별로 분할할 것인지 여부
-    -> Expand 한 이후에는 관문 완료가 None or All 일때만 Collapse 가능, 그렇지 않다면 흔들리면서 불가능 알려주기
-    Edit:
-    -->
+<ListgroupItem class="p-0">
+    <button class="w-full h-full p-3 hover:bg-gray-50 cursor-pointer" on:click={ () => { data.expanded = !data.expanded; } }>
 
-    <!-- TODO: TodoItem 별 Utility Button을 삭제하고, Expand -> Item name on:click / 나머지 -> Character Edit mode 활성화시 일괄 적용으로 변경 -->
-    <div
-            class="flex justify-between items-center"
-            class:order-1={ !data.expanded }
-            class:order-3={ data.expanded }
-    >
-        <P class="order-0 text-left font-bold text-md">
-            <A class="text-black dark:text-white hover:no-underline" on:click={ () => { data.expanded = !data.expanded; } }>{ data.name }</A>
-        </P>
-
-        <P
-                class="flex items-center gap-1 text-right font-bold text-md"
+        <div
+                class="flex justify-between items-center"
+                class:order-1={ !data.expanded }
+                class:order-3={ data.expanded }
         >
-            {#if gold > 0}
-                <DatabaseOutline class="inline-block w-2.5 h-2.5 text-yellow-400 dark:text-yellow-200" />
-                <Span class="text-yellow-400 dark:text-yellow-200">{ gold }</Span>
-            {:else}
-                {#if data.expanded}
-                    <CheckOutline class="inline-block w-4 h-4 text-green-400 dark:text-green-200" />
+            <P class="order-0 text-left font-bold text-md">
+                { data.name }
+            </P>
+
+            <P
+                    class="flex items-center gap-1 text-right font-bold text-md"
+            >
+                {#if gold > 0}
+                    <DatabaseOutline class="inline-block w-2.5 h-2.5 text-yellow-400 dark:text-yellow-200" />
+                    <Span class="text-yellow-400 dark:text-yellow-200">{ gold }</Span>
+                {:else}
+                    {#if data.expanded}
+                        <CheckOutline class="inline-block w-4 h-4 text-green-400 dark:text-green-200" />
+                    {/if}
                 {/if}
+            </P>
+
+            {#if !data.expanded}
+                <Checkbox class="order-2 w-5 h-5" style="background-size: 0.8rem 0.8rem;" checked={ simpleChecked } on:click={ (e) => {
+                    e.stopPropagation();
+
+                    data.breakpoints.forEach(breakpoint => {
+                        breakpoint.done = (gold !== 0);
+                    });
+
+                    data.breakpoints = data.breakpoints;
+                } } />
             {/if}
-        </P>
 
-        {#if !data.expanded}
-            <Checkbox class="order-2 w-5 h-5" style="background-size: 0.8rem 0.8rem;" bind:checked={ simpleChecked } />
+
+        </div>
+
+        {#if data.expanded}
+            <BreakpointBar bind:breakpoints={ data.breakpoints } />
         {/if}
-
-
-    </div>
-
-    {#if data.expanded}
-        <BreakpointBar bind:breakpoints={ data.breakpoints } />
-    {/if}
+    </button>
 </ListgroupItem>
 
 <style>

@@ -5,14 +5,15 @@ interface Params {
 	id: string;
 	maxCount: number;
 }
-export class BonusGaugeTodo extends Todo {
+
+export class CheckTodo extends Todo {
 	done: number;
 	currentBonus: number;
 	maxCount: number;
 	nextReset: number;
 
 	constructor({ name, id, maxCount }: Params) {
-		super({ name, type: 'Bonus', id });
+		super({ name, type: 'Check', id });
 
 		this.done = 0;
 		this.currentBonus = 0;

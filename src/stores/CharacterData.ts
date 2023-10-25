@@ -58,7 +58,6 @@ function rebuild(data: Character[]) {
 							})
 						);
 
-						newTodoGroups[j][k].type = 'Breakpoint';
 						break;
 					case 'Bonus':
 						nTodo = todo as BonusGaugeTodo;
@@ -70,7 +69,6 @@ function rebuild(data: Character[]) {
 
 						cpTodo.done = nTodo.done;
 						cpTodo.currentBonus = nTodo.currentBonus;
-						cpTodo.type = 'Bonus';
 
 						newTodoGroups[j].push(cpTodo);
 						break;

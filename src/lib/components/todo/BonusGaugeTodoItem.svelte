@@ -11,40 +11,49 @@
     export let data: BonusGaugeTodo;
     export let editMode: boolean;
 
-    let simpleChecked: boolean = false;
+    $: simpleChecked = data.done === data.maxCount;
 
     const dispatcher = createEventDispatcher();
 </script>
 
-<ListgroupItem>
-    <div class="flex justify-between items-center { data.expanded ? 'order-3' : 'order-1' }">
-        <div class="order-0 text-left font-bold text-md { editMode ? '' : 'flex gap-2 items-center' }">
-            <Span>
-               <A class="text-black dark:text-white hover:no-underline gap-2 items-center" on:click={ () => { data.expanded = !data.expanded; } }>{ data.name }</A>
-            </Span>
-            <div class="flex items-center gap-2">
-                {#if editMode}
-                    <button class="p-1 border-2 rounded-full" on:click={ () => { data.currentBonus = Math.max(0, data.currentBonus - 10); } }>
-                        <MinusOutline class="w-2.5 h-2.5" />
-                    </button>
-                {/if}
-                <div>{ data.currentBonus }</div>
-                {#if editMode}
-                    <button class="p-1 border-2 rounded-full" on:click={ () => { data.currentBonus = Math.min(100, data.currentBonus + 10); } }>
-                        <PlusOutline class="w-2.5 h-2.5" />
-                    </button>
-                {/if}
+<ListgroupItem class="p-0">
+    <button class="w-full h-full p-3 hover:bg-gray-50 cursor-pointer" on:click={ () => { data.expanded = !data.expanded; } }>
+        <div class="flex justify-between items-center { data.expanded ? 'order-3' : 'order-1' }">
+            <div class="order-0 text-left font-bold text-md { editMode ? '' : 'flex gap-2 items-center' }">
+                <P class="order-0 text-left font-bold text-md">{ data.name }</P>
+                <div class="flex items-center gap-2">
+                    {#if editMode}
+                        <button class="p-1 border-2 rounded-full" on:click={ () => { data.currentBonus = Math.max(0, data.currentBonus - 10); } }>
+                            <MinusOutline class="w-2.5 h-2.5" />
+                        </button>
+                    {/if}
+                    <div>{ data.currentBonus }</div>
+                    {#if editMode}
+                        <button class="p-1 border-2 rounded-full" on:click={ () => { data.currentBonus = Math.min(100, data.currentBonus + 10); } }>
+                            <PlusOutline class="w-2.5 h-2.5" />
+                        </button>
+                    {/if}
+                </div>
             </div>
+
+            {#if !data.expanded}
+                <Checkbox class="order-2 w-5 h-5" style="background-size: 0.8rem 0.8rem;" checked={ simpleChecked } on:click={
+                    (e) => {
+                        e.stopPropagation();
+
+                        if (data.done === 0) data.done = data.maxCount;
+                        else data.done = 0;
+
+
+                    }
+                } />
+            {/if}
         </div>
 
-        {#if !data.expanded}
-            <Checkbox class="order-2 w-5 h-5" style="background-size: 0.8rem 0.8rem;" bind:checked={ simpleChecked } />
+        {#if data.expanded}
+            <BonusGaugeBar bind:current={ data.done } max={ data.maxCount } />
         {/if}
-    </div>
-
-    {#if data.expanded}
-        <BonusGaugeBar bind:current={ data.done } max={ data.maxCount } />
-    {/if}
+    </button>
 </ListgroupItem>
 
 <style>

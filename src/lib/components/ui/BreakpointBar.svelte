@@ -9,7 +9,9 @@
         <button class="w-full h-full rounded-sm border-2 { breakpoint.borderColor } { breakpoint.borderColorDark }
                     { breakpoint.done ? breakpoint.bgColor : 'bg-white' }
                     { breakpoint.done ? breakpoint.bgColorDark : 'dark:bg-gray-600' }"
-                on:click={ () => {
+                on:click={ (e) => {
+                    e.stopPropagation();
+
                     if (breakpoints[i].done) {
                         for (let idx = i; idx < breakpoints.length; idx++) {
                             if (breakpoints[i].resetPeriod === breakpoints[idx].resetPeriod) breakpoints[idx].done = false;

@@ -2,13 +2,15 @@
     import type { Character } from "$lib/classes/Character";
     import type { Todo } from "$lib/classes/Todo";
 
-    import {Avatar, Button, ButtonGroup, Card, Listgroup, P, Span} from "flowbite-svelte";
+    import { Button, ButtonGroup, Card, Listgroup, P, Span } from "flowbite-svelte";
     import WeeklyTemplates from "$lib/templates/WeeklyTemplates";
-    import {CloseOutline, EditOutline, ExpandOutline} from "flowbite-svelte-icons";
+    import {CloseOutline, EditOutline, ExpandOutline, PlusOutline} from "flowbite-svelte-icons";
     import BreakpointTodoItem from "$lib/components/todo/BreakpointTodoItem.svelte";
     import {BreakpointTodo} from "$lib/classes/BreakpointTodo";
     import BonusGaugeTodoItem from "$lib/components/todo/BonusGaugeTodoItem.svelte";
     import {BonusGaugeTodo} from "$lib/classes/BonusGaugeTodo";
+
+    import ClassIcon from "$lib/components/ui/ClassIcon.svelte";
 
     export let character: Character;
     export let onDestroy: () => void;
@@ -19,7 +21,7 @@
 <Card size="md" class="relative flex-col inline-block w-1/7 h-full !p-4">
     <!--<Button class="w-1 absolute right-5" on:click={ createNewWork }>+</Button>-->
     <div class="flex w-full items-center justify-center gap-2">
-        <Avatar size="sm" />
+        <ClassIcon size="sm" className={ character.className } />
         <P class="font-bold text-lg">{ character.name }</P>
     </div>
     <div class="flex w-full items-center justify-center gap-2">
@@ -49,6 +51,7 @@
 
     <div class="w-full text-right mt-2">
         <ButtonGroup class="h-6">
+            <Button class="p-3"><PlusOutline class="w-3.5 h-3.5 select-none" /></Button>
             <Button class="p-3" on:click={ () => { editMode = !editMode; } }><EditOutline class="w-4 h-4 select-none" /></Button>
             <Button class="p-3" on:click={ onDestroy }><CloseOutline class="w-3 h-3 select-none" /></Button>
         </ButtonGroup>
