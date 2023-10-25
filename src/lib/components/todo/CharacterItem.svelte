@@ -11,6 +11,8 @@
     import {BonusGaugeTodo} from "$lib/classes/BonusGaugeTodo";
 
     import ClassIcon from "$lib/components/ui/ClassIcon.svelte";
+    import {CheckTodo} from "$lib/classes/CheckTodo";
+    import CheckTodoItem from "$lib/components/todo/CheckTodoItem.svelte";
 
     export let character: Character;
     export let onDestroy: () => void;
@@ -42,6 +44,8 @@
                             <BreakpointTodoItem editMode={ editMode } bind:data={ work } on:destroy={ () => { todo.splice(i, 1); character = character; } } />
                         {:else if work instanceof BonusGaugeTodo}
                             <BonusGaugeTodoItem editMode={ editMode } bind:data={ work } on:destroy={ () => { todo.splice(i, 1); character = character; } } />
+                        {:else if work instanceof CheckTodo}
+                            <CheckTodoItem editMode={ editMode } bind:data={ work } on:destroy={ () => { todo.splice(i, 1); character = character; } } />
                         {/if}
                     {/each}
                 </Listgroup>

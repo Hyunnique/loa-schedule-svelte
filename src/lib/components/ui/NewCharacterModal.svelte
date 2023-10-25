@@ -8,6 +8,7 @@
     import DailyTemplates from "$lib/templates/DailyTemplates";
     import {BonusGaugeTodo} from "$lib/classes/BonusGaugeTodo";
     import {Character} from "$lib/classes/Character";
+    import {CheckTodo} from "$lib/classes/CheckTodo";
 
     export let open: boolean = false;
     export let characters: Character[];
@@ -139,11 +140,19 @@
                 let dailys: Todo[] = [];
 
                 for (let template of DailyTemplates) {
-                    dailys.push(new BonusGaugeTodo({
-                        name: template.name,
-                        id: template.id,
-                        maxCount: template.maxCount
-                    }));
+                    if (template.type == 'Bonus') {
+                        dailys.push(new BonusGaugeTodo({
+                            name: template.name,
+                            id: template.id,
+                            maxCount: template.maxCount
+                        }));
+                    } else if (template.type == 'Check') {
+                        dailys.push(new CheckTodo({
+                            name: template.name,
+                            id: template.id,
+                            resetPeriod: 1
+                        }));
+                    }
                 }
 
                 let characterObj: Character = new Character({

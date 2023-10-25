@@ -5,6 +5,7 @@ import type { Todo } from '$lib/classes/Todo';
 import { BreakpointTodo } from '$lib/classes/BreakpointTodo';
 import { Breakpoint } from '$lib/classes/Breakpoint';
 import { BonusGaugeTodo } from '$lib/classes/BonusGaugeTodo';
+import { CheckTodo } from '$lib/classes/CheckTodo';
 
 const characterDataTemp: string | null = browser ? localStorage.getItem('CharacterData') : null;
 
@@ -23,7 +24,10 @@ function rebuild(data: Character[]) {
 				let bTodo: BreakpointTodo,
 					nTodo: BonusGaugeTodo,
 					cpTodo: BonusGaugeTodo,
+					cTodo: CheckTodo,
 					newBreakpoints: Breakpoint[];
+
+				// TODO: switch~case 에서 if~else로 변경하고 type별로 내부에 변수 선언 및 캐스팅, 모든 Todo에 대해서 nextReset 소실되는 문제 수정하기
 				switch (todo.type) {
 					case 'Breakpoint':
 						bTodo = todo as BreakpointTodo;
@@ -72,6 +76,16 @@ function rebuild(data: Character[]) {
 
 						newTodoGroups[j].push(cpTodo);
 						break;
+					case 'Check':
+						cTodo = todo as CheckTodo;
+
+						newTodoGroups[j].push(
+							new CheckTodo({
+								name: cTodo.name,
+								id: cTodo.id,
+								resetPeriod: cTodo.resetPeriod
+							})
+						);
 				}
 			}
 		}

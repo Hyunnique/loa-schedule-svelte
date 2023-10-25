@@ -3,21 +3,19 @@ import { Todo } from '$lib/classes/Todo';
 interface Params {
 	name: string;
 	id: string;
-	maxCount: number;
+	resetPeriod: number;
 }
 
 export class CheckTodo extends Todo {
-	done: number;
-	currentBonus: number;
-	maxCount: number;
+	done: boolean;
+	resetPeriod: number;
 	nextReset: number;
 
-	constructor({ name, id, maxCount }: Params) {
+	constructor({ name, id, resetPeriod }: Params) {
 		super({ name, type: 'Check', id });
 
-		this.done = 0;
-		this.currentBonus = 0;
-		this.maxCount = maxCount;
+		this.done = false;
+		this.resetPeriod = resetPeriod;
 		this.expanded = false;
 
 		this.nextReset = this.calculateNextReset();
@@ -29,19 +27,15 @@ export class CheckTodo extends Todo {
 
 		let diff: number = now.getTime() - resetDefault.getTime();
 
-		diff = Math.floor(diff / 1000 / 60 / 60 / 24) + 1;
+		diff = Math.floor(diff / 1000 / 60 / 60 / 24 / this.resetPeriod) + 1;
 
-		return resetDefault.getTime() + diff * 24 * 60 * 60 * 1000;
+		return resetDefault.getTime() + diff * this.resetPeriod * 24 * 60 * 60 * 1000;
 	}
 
 	checkReset() {
 		const now: Date = new Date();
 		if (this.nextReset <= now.getTime()) {
-			let diff: number = now.getTime() - this.nextReset;
-			diff = Math.floor(diff / 1000 / 60 / 60 / 24) + 1;
-
-			this.currentBonus = Math.min(100, this.currentBonus + (diff * 20 - this.done * 10));
-			this.done = 0;
+			this.done = false;
 			this.nextReset = this.calculateNextReset();
 		}
 	}
