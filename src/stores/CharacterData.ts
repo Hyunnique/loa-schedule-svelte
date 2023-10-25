@@ -20,8 +20,10 @@ function rebuild(data: Character[]) {
 			newTodoGroups.push([]);
 			for (let k = 0; k < data[i].todoGroups[j].length; k++) {
 				const todo: Todo = data[i].todoGroups[j][k];
-
-				let bTodo: BreakpointTodo, nTodo: BonusGaugeTodo, newBreakpoints: Breakpoint[];
+				let bTodo: BreakpointTodo,
+					nTodo: BonusGaugeTodo,
+					cpTodo: BonusGaugeTodo,
+					newBreakpoints: Breakpoint[];
 				switch (todo.type) {
 					case 'Breakpoint':
 						bTodo = todo as BreakpointTodo;
@@ -60,17 +62,17 @@ function rebuild(data: Character[]) {
 						break;
 					case 'Bonus':
 						nTodo = todo as BonusGaugeTodo;
+						cpTodo = new BonusGaugeTodo({
+							name: nTodo.name,
+							id: nTodo.id,
+							maxCount: nTodo.maxCount
+						});
 
-						newTodoGroups[j].push(
-							new BonusGaugeTodo({
-								name: nTodo.name,
-								id: nTodo.id,
-								maxCount: nTodo.maxCount
-							})
-						);
+						cpTodo.done = nTodo.done;
+						cpTodo.currentBonus = nTodo.currentBonus;
+						cpTodo.type = 'Bonus';
 
-						// BonusGaugeTodo 먼저 만들고 변수 바꾼뒤 넣기
-						newTodoGroups[j][k] = 'Breakpoint';
+						newTodoGroups[j].push(cpTodo);
 						break;
 				}
 			}
@@ -86,7 +88,6 @@ function rebuild(data: Character[]) {
 		data[i].todoGroups = newTodoGroups;
 	}
 
-	console.log(data);
 	return data;
 }
 

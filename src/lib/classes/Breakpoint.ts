@@ -17,6 +17,7 @@ export class Breakpoint {
 	estimatedTimeComfort: number;
 	resetPeriod: number;
 
+	nextReset: number;
 	bgColor: string;
 	borderColor: string;
 	bgColorDark: string;
@@ -48,7 +49,29 @@ export class Breakpoint {
 		this.bgColorDark = '';
 		this.borderColorDark = '';
 
+		this.nextReset = this.calculateNextReset();
+
 		this.setDefaultColor();
+	}
+
+	calculateNextReset() {
+		const resetDefault: Date = new Date(2023, 10 - 1, 25, 6, 0, 0, 0);
+		const now: Date = new Date();
+
+		let diff: number = now.getTime() - resetDefault.getTime();
+
+		diff = Math.floor(diff / 1000 / 60 / 60 / 24 / this.resetPeriod) + 1;
+
+		return resetDefault.getTime() + diff * this.resetPeriod * 24 * 60 * 60 * 1000;
+	}
+
+	checkReset() {
+		const now: Date = new Date();
+		if (this.nextReset <= now.getTime()) {
+			this.done = false;
+			if (this.disabled === 1) this.disabled = 0;
+			this.nextReset = this.calculateNextReset();
+		}
 	}
 
 	setDefaultColor() {
