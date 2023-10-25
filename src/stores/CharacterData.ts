@@ -21,71 +21,77 @@ function rebuild(data: Character[]) {
 			newTodoGroups.push([]);
 			for (let k = 0; k < data[i].todoGroups[j].length; k++) {
 				const todo: Todo = data[i].todoGroups[j][k];
-				let bTodo: BreakpointTodo,
-					nTodo: BonusGaugeTodo,
-					cpTodo: BonusGaugeTodo,
-					cTodo: CheckTodo,
-					newBreakpoints: Breakpoint[];
 
-				// TODO: switch~case 에서 if~else로 변경하고 type별로 내부에 변수 선언 및 캐스팅, 모든 Todo에 대해서 nextReset 소실되는 문제 수정하기
-				switch (todo.type) {
-					case 'Breakpoint':
-						bTodo = todo as BreakpointTodo;
-						newBreakpoints = [];
+				if (todo.type == 'Breakpoint') {
+					const bTodo: BreakpointTodo = todo as BreakpointTodo;
+					const newBreakpoints: Breakpoint[] = [];
 
-						for (let l = 0; l < bTodo.breakpoints.length; l++) {
-							newBreakpoints.push(
-								new Breakpoint({
-									id: bTodo.breakpoints[l].id,
-									itemLevelMin: bTodo.breakpoints[l].itemLevelMin,
-									itemLevelComfort: bTodo.breakpoints[l].itemLevelComfort,
-									gold: bTodo.breakpoints[l].gold,
-									estimatedTimeMin: bTodo.breakpoints[l].estimatedTimeMin,
-									estimatedTimeComfort: bTodo.breakpoints[l].estimatedTimeComfort,
-									resetPeriod: bTodo.breakpoints[l].resetPeriod
-								})
-							);
-
-							newBreakpoints[l].done = bTodo.breakpoints[l].done;
-							newBreakpoints[l].disabled = bTodo.breakpoints[l].disabled;
-							newBreakpoints[l].bgColor = bTodo.breakpoints[l].bgColor;
-							newBreakpoints[l].borderColor = bTodo.breakpoints[l].borderColor;
-							newBreakpoints[l].bgColorDark = bTodo.breakpoints[l].bgColorDark;
-							newBreakpoints[l].borderColorDark = bTodo.breakpoints[l].borderColorDark;
-						}
-
-						newTodoGroups[j].push(
-							new BreakpointTodo({
-								name: bTodo.name,
-								id: bTodo.id,
-								breakpoints: newBreakpoints
-							})
-						);
-
-						break;
-					case 'Bonus':
-						nTodo = todo as BonusGaugeTodo;
-						cpTodo = new BonusGaugeTodo({
-							name: nTodo.name,
-							id: nTodo.id,
-							maxCount: nTodo.maxCount
+					for (let l = 0; l < bTodo.breakpoints.length; l++) {
+						const newBreakpoint: Breakpoint = new Breakpoint({
+							id: bTodo.breakpoints[l].id,
+							itemLevelMin: bTodo.breakpoints[l].itemLevelMin,
+							itemLevelComfort: bTodo.breakpoints[l].itemLevelComfort,
+							gold: bTodo.breakpoints[l].gold,
+							estimatedTimeMin: bTodo.breakpoints[l].estimatedTimeMin,
+							estimatedTimeComfort: bTodo.breakpoints[l].estimatedTimeComfort,
+							resetPeriod: bTodo.breakpoints[l].resetPeriod
 						});
 
-						cpTodo.done = nTodo.done;
-						cpTodo.currentBonus = nTodo.currentBonus;
+						newBreakpoint.done = bTodo.breakpoints[l].done;
+						newBreakpoint.disabled = bTodo.breakpoints[l].disabled;
+						newBreakpoint.bgColor = bTodo.breakpoints[l].bgColor;
+						newBreakpoint.borderColor = bTodo.breakpoints[l].borderColor;
+						newBreakpoint.bgColorDark = bTodo.breakpoints[l].bgColorDark;
+						newBreakpoint.borderColorDark = bTodo.breakpoints[l].borderColorDark;
+						newBreakpoint.nextReset = bTodo.breakpoints[l].nextReset;
 
-						newTodoGroups[j].push(cpTodo);
-						break;
-					case 'Check':
-						cTodo = todo as CheckTodo;
+						newBreakpoints.push(newBreakpoint);
+					}
 
-						newTodoGroups[j].push(
-							new CheckTodo({
-								name: cTodo.name,
-								id: cTodo.id,
-								resetPeriod: cTodo.resetPeriod
-							})
-						);
+					const newTodo: BreakpointTodo = new BreakpointTodo({
+						name: bTodo.name,
+						id: bTodo.id,
+						breakpoints: newBreakpoints
+					});
+
+					newTodo.expanded = bTodo.expanded;
+					newTodo.memo = bTodo.memo;
+					newTodo.important = bTodo.important;
+
+					newTodoGroups[j].push(newTodo);
+				}
+				else if (todo.type == 'Bonus') {
+					const nTodo: BonusGaugeTodo = todo as BonusGaugeTodo;
+					const newTodo: BonusGaugeTodo = new BonusGaugeTodo({
+						name: nTodo.name,
+						id: nTodo.id,
+						maxCount: nTodo.maxCount
+					});
+
+					newTodo.done = nTodo.done;
+					newTodo.currentBonus = nTodo.currentBonus;
+					newTodo.nextReset = nTodo.nextReset;
+					newTodo.expanded = nTodo.expanded;
+					newTodo.memo = nTodo.memo;
+					newTodo.important = nTodo.important;
+
+					newTodoGroups[j].push(newTodo);
+				}
+				else if (todo.type == 'Check') {
+					const cTodo: CheckTodo = todo as CheckTodo;
+					const newTodo: CheckTodo = new CheckTodo({
+						name: cTodo.name,
+						id: cTodo.id,
+						resetPeriod: cTodo.resetPeriod
+					});
+
+					newTodo.done = cTodo.done;
+					newTodo.nextReset = cTodo.nextReset;
+					newTodo.expanded = cTodo.expanded;
+					newTodo.memo = cTodo.memo;
+					newTodo.important = cTodo.important;
+
+					newTodoGroups[j].push(newTodo);
 				}
 			}
 		}
