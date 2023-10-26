@@ -14,11 +14,17 @@
 
 	import {Button, Input, Modal, P } from "flowbite-svelte";
 	import AddCharacterItem from "$lib/components/todo/AddCharacterItem.svelte";
-	import NewCharacterModal from "$lib/components/ui/NewCharacterModal.svelte";
+	import AddCharacterModal from "$lib/components/ui/AddCharacterModal.svelte";
+	import {ExclamationCircleOutline} from "flowbite-svelte-icons";
+	import AddTodoModal from "$lib/components/ui/AddTodoModal.svelte";
 
 	let characters: Character[] = get(CharacterData);
 
 	let createCharacterModal = false;
+	let removeConfirmModal = false;
+	let addTodoModal = false;
+
+	let characterTarget = 0;
 
 	$: CharacterData.set(characters);
 
@@ -82,15 +88,57 @@
 <section>
 	<P class="text-md font-bold p-2 mb-2">총 흭득한 주간 골드 : { earnedGold.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") } / { totalGold.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</P>
 
+	<!-- CharacterItem List -->
 	<div class="character-grid grid gap-4">
 		{#each characters as _character, i }
-			<CharacterItem bind:character={ _character } onDestroy={ () => { characters.splice(i, 1); characters = characters; } } />
+			<CharacterItem bind:character={ _character }
+						   on:addTodo={ () => { characterTarget = i; addTodoModal = true; } }
+						   on:removeItem={ () => { removeConfirmModal = true; characterTarget = i; } }
+			/>
 		{/each}
 
 		<AddCharacterItem bind:modal={ createCharacterModal } />
 	</div>
 
-	<NewCharacterModal bind:characters={ characters } bind:open={ createCharacterModal } />
+	<!-- 캐릭터 삭제 확인 Modal -->
+	<Modal bind:open={ removeConfirmModal } outsideclose>
+		<div class="text-center">
+			<ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
+			<h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">정말 캐릭터를 삭제하시겠습니까?</h3>
+			<Button color="red" class="mr-2" on:click={ () => {
+				characters.splice(characterTarget, 1);
+				characters = characters;
+
+				removeConfirmModal = false;
+			} }>삭제</Button>
+			<Button color="alternative" on:click={ () => { removeConfirmModal = false; } }>취소</Button>
+		</div>
+	</Modal>
+
+	<!-- 캐릭터 추가 Modal -->
+	<AddCharacterModal bind:characters={ characters } bind:open={ createCharacterModal } />
+
+	<!-- 숙제 추가 Modal -->
+	<AddTodoModal
+			groupSize={ (characters[characterTarget] !== undefined ? characters[characterTarget].todoGroups.length : 0) }
+			bind:open={ addTodoModal }
+			on:addGroup={ () => {
+				characters[characterTarget].todoGroups.push([]);
+				characters = characters;
+			} }
+			on:create={ (e) => {
+				characters[characterTarget].todoGroups[e.detail.targetGroup].push(e.detail.todo);
+				characters = characters;
+				addTodoModal = false;
+			} }
+			on:createAll={ (e) => {
+				characters.forEach(character => {
+					character.todoGroups[e.detail.targetGroup].push(structuredClone(e.detail.todo));
+				});
+				characters = characters;
+				addTodoModal = false;
+			} }
+	/>
 </section>
 
 <style>
