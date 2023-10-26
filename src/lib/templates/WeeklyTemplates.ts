@@ -4,6 +4,7 @@ export default [
 	{
 		name: '카멘 하드',
 		id: 'kamen.hard',
+		type: 'Breakpoint',
 		breakpoints: [
 			{
 				itemLevelMin: 1630,
@@ -42,6 +43,7 @@ export default [
 	{
 		name: '카멘 노말',
 		id: 'kamen.normal',
+		type: 'Breakpoint',
 		breakpoints: [
 			{
 				itemLevelMin: 1610,
@@ -72,6 +74,7 @@ export default [
 	{
 		name: '상아탑 하드',
 		id: 'tower.hard',
+		type: 'Breakpoint',
 		breakpoints: [
 			{
 				itemLevelMin: 1620,
@@ -110,6 +113,7 @@ export default [
 	{
 		name: '상아탑 노말',
 		id: 'tower.normal',
+		type: 'Breakpoint',
 		breakpoints: [
 			{
 				itemLevelMin: 1600,
@@ -148,6 +152,7 @@ export default [
 	{
 		name: '일리아칸 하드',
 		id: 'akan.hard',
+		type: 'Breakpoint',
 		breakpoints: [
 			{
 				itemLevelMin: 1600,
@@ -178,6 +183,7 @@ export default [
 	{
 		name: '일리아칸 노말',
 		id: 'akan.normal',
+		type: 'Breakpoint',
 		breakpoints: [
 			{
 				itemLevelMin: 1580,
@@ -208,6 +214,7 @@ export default [
 	{
 		name: '카양겔 하드',
 		id: 'kayangel.hard',
+		type: 'Breakpoint',
 		breakpoints: [
 			{
 				itemLevelMin: 1580,
@@ -238,6 +245,7 @@ export default [
 	{
 		name: '카양겔 노말',
 		id: 'kayangel.normal',
+		type: 'Breakpoint',
 		breakpoints: [
 			{
 				itemLevelMin: 1540,
@@ -268,6 +276,7 @@ export default [
 	{
 		name: '아브렐슈드 하드',
 		id: 'abrelshud.hard',
+		type: 'Breakpoint',
 		breakpoints: [
 			{
 				itemLevelMin: 1540,
@@ -306,6 +315,7 @@ export default [
 	{
 		name: '아브렐슈드 노말',
 		id: 'abrelshud.normal',
+		type: 'Breakpoint',
 		breakpoints: [
 			{
 				itemLevelMin: 1490,
@@ -344,6 +354,7 @@ export default [
 	{
 		name: '쿠크세이튼 하드',
 		id: 'kokou.hard',
+		type: 'Breakpoint',
 		breakpoints: [
 			{
 				itemLevelMin: 1475,
