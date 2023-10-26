@@ -39,6 +39,10 @@ export class BonusGaugeTodo extends Todo {
 			let diff: number = now.getTime() - this.nextReset;
 			diff = Math.floor(diff / 1000 / 60 / 60 / 24) + 1;
 
+			for (let i = 0; i < this.done; i++) {
+				if (this.currentBonus >= 20) this.currentBonus -= 20;
+			}
+
 			this.currentBonus = Math.min(100, this.currentBonus + (diff * (this.maxCount * 10) - this.done * 10));
 			this.done = 0;
 			this.nextReset = this.calculateNextReset();
