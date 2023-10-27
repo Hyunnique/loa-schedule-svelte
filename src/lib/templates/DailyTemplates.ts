@@ -15,7 +15,7 @@ export default [
 		name: '가디언 토벌',
 		id: 'guardian',
 		type: 'Bonus',
-		maxCount: 2
+		maxCount: 1
 	},
 	{
 		name: '길드 출석',
