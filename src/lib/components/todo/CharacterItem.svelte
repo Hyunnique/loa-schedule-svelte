@@ -14,7 +14,7 @@
     import {createEventDispatcher} from "svelte";
 
     export let character: Character;
-    const dispatcher = createEventDispatcher();
+    const dispatch = createEventDispatcher();
     let editMode = false;
 </script>
 
@@ -33,16 +33,49 @@
     </div>
 
     <div class="flex flex-col gap-2">
-        {#each character.todoGroups as todo}
+        {#each character.todoGroups as todo, groupIndex}
             {#if todo.length > 0 }
                 <Listgroup class="border-2 dark:!bg-transparent">
                     {#each todo as work, i}
                         {#if work instanceof BreakpointTodo}
-                            <BreakpointTodoItem editMode={ editMode } bind:data={ work } on:destroy={ () => { todo.splice(i, 1); character = character; } } />
+                            <BreakpointTodoItem
+                                    editMode={ editMode }
+                                    bind:data={ work }
+                                    on:destroy={ () => { todo.splice(i, 1); character = character; } }
+                                    on:edit={ () => {
+                                        dispatch("edit", {
+                                            groupTarget: groupIndex,
+                                            todoTargetIndex: i,
+                                            todoTarget: work
+                                        });
+                                    } }
+                            />
                         {:else if work instanceof BonusGaugeTodo}
-                            <BonusGaugeTodoItem editMode={ editMode } bind:data={ work } on:destroy={ () => { todo.splice(i, 1); character = character; } } />
+                            <BonusGaugeTodoItem
+                                    editMode={ editMode }
+                                    bind:data={ work }
+                                    on:destroy={ () => { todo.splice(i, 1); character = character; } }
+                                    on:edit={ () => {
+                                        dispatch("edit", {
+                                            groupTarget: groupIndex,
+                                            todoTargetIndex: i,
+                                            todoTarget: work
+                                        });
+                                    } }
+                            />
                         {:else if work instanceof CheckTodo}
-                            <CheckTodoItem editMode={ editMode } bind:data={ work } on:destroy={ () => { todo.splice(i, 1); character = character; } } />
+                            <CheckTodoItem
+                                    editMode={ editMode }
+                                    bind:data={ work }
+                                    on:destroy={ () => { todo.splice(i, 1); character = character; } }
+                                    on:edit={ () => {
+                                        dispatch("edit", {
+                                            groupTarget: groupIndex,
+                                            todoTargetIndex: i,
+                                            todoTarget: work
+                                        });
+                                    } }
+                            />
                         {/if}
                     {/each}
                 </Listgroup>
@@ -52,9 +85,9 @@
 
     <div class="w-full text-right mt-2">
         <ButtonGroup class="h-6">
-            <Button class="p-3" on:click={ () => { dispatcher("addTodo"); } }><PlusOutline class="w-3.5 h-3.5 focus:outline-0" /></Button>
+            <Button class="p-3" on:click={ () => { dispatch("addTodo"); } }><PlusOutline class="w-3.5 h-3.5 focus:outline-0" /></Button>
             <Button class="p-3" on:click={ () => { editMode = !editMode; } }><EditOutline class="w-4 h-4 focus:outline-0" /></Button>
-            <Button class="p-3" on:click={ () => { dispatcher("removeItem"); } }><CloseOutline class="w-3 h-3 focus:outline-0" /></Button>
+            <Button class="p-3" on:click={ () => { dispatch("removeItem"); } }><CloseOutline class="w-3 h-3 focus:outline-0" /></Button>
         </ButtonGroup>
     </div>
 </Card>

@@ -17,14 +17,22 @@
 	import AddCharacterModal from "$lib/components/ui/AddCharacterModal.svelte";
 	import {ExclamationCircleOutline} from "flowbite-svelte-icons";
 	import AddTodoModal from "$lib/components/ui/AddTodoModal.svelte";
+	import type {Todo} from "$lib/classes/Todo";
+	import EditTodoModal from "$lib/components/ui/EditTodoModal.svelte";
+	import ExclamationConfirmModal from "$lib/components/ui/ExclamationConfirmModal.svelte";
 
 	let characters: Character[] = get(CharacterData);
 
 	let createCharacterModal = false;
 	let removeConfirmModal = false;
+	let editTodoModal = false;
+
 	let addTodoModal = false;
 
 	let characterTarget = 0;
+	let groupTarget = 0;
+	let todoTarget: Todo;
+	let todoTargetIndex = 0;
 
 	$: CharacterData.set(characters);
 
@@ -94,6 +102,7 @@
 			<CharacterItem bind:character={ _character }
 						   on:addTodo={ () => { characterTarget = i; addTodoModal = true; } }
 						   on:removeItem={ () => { removeConfirmModal = true; characterTarget = i; } }
+						   on:edit={ (e) => { characterTarget = i; groupTarget = e.detail.groupTarget; todoTargetIndex = e.detail.todoTargetIndex; todoTarget = e.detail.todoTarget; editTodoModal = true; } }
 			/>
 		{/each}
 
@@ -101,43 +110,51 @@
 	</div>
 
 	<!-- 캐릭터 삭제 확인 Modal -->
-	<Modal bind:open={ removeConfirmModal } outsideclose>
-		<div class="text-center">
-			<ExclamationCircleOutline class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" />
-			<h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">정말 캐릭터를 삭제하시겠습니까?</h3>
-			<Button color="red" class="mr-2" on:click={ () => {
+	<ExclamationConfirmModal
+			bind:open={ removeConfirmModal }
+			on:confirm={ () => {
 				characters.splice(characterTarget, 1);
 				characters = characters;
-
 				removeConfirmModal = false;
-			} }>삭제</Button>
-			<Button color="alternative" on:click={ () => { removeConfirmModal = false; } }>취소</Button>
-		</div>
-	</Modal>
+			} }
+			on:cancel={ () => { removeConfirmModal = false; } }
+	/>
 
 	<!-- 캐릭터 추가 Modal -->
 	<AddCharacterModal bind:characters={ characters } bind:open={ createCharacterModal } />
 
 	<!-- 숙제 추가 Modal -->
 	<AddTodoModal
-			groupSize={ (characters[characterTarget] !== undefined ? characters[characterTarget].todoGroups.length : 0) }
-			bind:open={ addTodoModal }
-			on:addGroup={ () => {
-				characters[characterTarget].todoGroups.push([]);
-				characters = characters;
-			} }
-			on:create={ (e) => {
-				characters[characterTarget].todoGroups[e.detail.targetGroup].push(e.detail.todo);
-				characters = characters;
-				addTodoModal = false;
-			} }
-			on:createAll={ (e) => {
-				characters.forEach(character => {
-					character.todoGroups[e.detail.targetGroup].push(structuredClone(e.detail.todo));
-				});
-				characters = characters;
-				addTodoModal = false;
-			} }
+		groupSize={ (characters[characterTarget] !== undefined ? characters[characterTarget].todoGroups.length : 0) }
+		bind:open={ addTodoModal }
+		on:addGroup={ () => {
+			characters[characterTarget].todoGroups.push([]);
+			characters = characters;
+		} }
+		on:create={ (e) => {
+			characters[characterTarget].todoGroups[e.detail.targetGroup].push(e.detail.todo);
+			characters = characters;
+			addTodoModal = false;
+		} }
+		on:createAll={ (e) => {
+			characters.forEach(character => {
+				while (character.todoGroups.length <= e.detail.targetGroup) character.todoGroups.push([]);
+				character.todoGroups[e.detail.targetGroup].push(structuredClone(e.detail.todo));
+				character.todoGroups = character.todoGroups;
+			});
+			characters = characters;
+			addTodoModal = false;
+		} }
+	/>
+
+	<!-- 숙제 수정 Modal -->
+	<EditTodoModal
+		bind:open={ editTodoModal }
+		bind:target={ todoTarget }
+		on:remove={ () => {
+			characters[characterTarget].todoGroups[groupTarget].splice(todoTargetIndex , 1);
+			characters = characters;
+		} }
 	/>
 </section>
 

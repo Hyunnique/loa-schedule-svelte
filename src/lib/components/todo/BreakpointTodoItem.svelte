@@ -12,7 +12,7 @@
     export let data: BreakpointTodo;
     export let editMode: boolean;
 
-    const dispatcher = createEventDispatcher();
+    const dispatch = createEventDispatcher();
 
     $: gold = sumGold(data.breakpoints);
     $: simpleChecked = gold === 0; // 이렇게 하지 말고 Child:onchange에서 0 or all일 경우 핸들링
@@ -30,7 +30,13 @@
 </script>
 
 <ListgroupItem class="p-0">
-    <button class="w-full h-full p-3 hover:bg-gray-50 dark:hover:bg-gray-50 dark:hover:bg-opacity-10 cursor-pointer" on:click={ () => { data.expanded = !data.expanded; } }>
+    <button class="w-full h-full p-3 hover:bg-gray-50 dark:hover:bg-gray-50 dark:hover:bg-opacity-10 cursor-pointer" on:click={ () => {
+        if (editMode) {
+            dispatch("edit");
+        } else {
+            data.expanded = !data.expanded;
+        }
+    } }>
 
         <div
                 class="flex justify-between items-center"
