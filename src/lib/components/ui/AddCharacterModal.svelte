@@ -55,13 +55,7 @@
         let characterResults: Character[] = [];
         searchChecked = [];
 
-        fetch(`https://developer-lostark.game.onstove.com/characters/${name}/siblings`, {
-            method: "GET",
-            headers: {
-                "accept": "application/json",
-                "authorization": "bearer " + import.meta.env.VITE_LOSTARK_API_KEY // 임시로 사용하고 Backend 개발시 넘기기
-            }
-        })
+        fetch(`/api/character/${name}`, { method: "GET" })
         .then(response => response.json())
         .then((result: CharacterAPIResult[]) => {
             let mainCharacterResult: CharacterAPIResult | undefined = result.find((x: CharacterAPIResult) => x.CharacterName == name);

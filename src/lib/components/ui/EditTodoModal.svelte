@@ -12,7 +12,7 @@
     export let target = new Todo({ name: "", type: "Check", id: "" });
 
     let name: string;
-    $: name = target.name;
+    name = target.name;
 
     const dispatch = createEventDispatcher();
 
