@@ -18,7 +18,7 @@
                         }
                     } else {
                         for (let idx = 0; idx <= i; idx++) {
-                            if (breakpoints[i].resetPeriod === breakpoints[idx].resetPeriod) breakpoints[idx].done = true;
+                            breakpoints[idx].done = true;
                         }
 
                         for (let idx = i + 1; idx < breakpoints.length; idx++) {
