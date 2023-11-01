@@ -5,7 +5,6 @@
 	import type { Character } from "$lib/classes/Character";
 
 	import { BreakpointTodo } from "$lib/classes/BreakpointTodo";
-	import { BonusGaugeTodo } from "$lib/classes/BonusGaugeTodo";
 
 	import CharacterItem from '$lib/components/todo/CharacterItem.svelte';
 
@@ -20,6 +19,7 @@
 	import type {Todo} from "$lib/classes/Todo";
 	import EditTodoModal from "$lib/components/ui/EditTodoModal.svelte";
 	import ExclamationConfirmModal from "$lib/components/ui/ExclamationConfirmModal.svelte";
+	import {CheckTodo} from "$lib/classes/CheckTodo";
 
 	let characters: Character[] = get(CharacterData);
 
@@ -33,6 +33,8 @@
 	let groupTarget = 0;
 	let todoTarget: Todo;
 	let todoTargetIndex = 0;
+
+	let editMode = -1;
 
 	$: CharacterData.set(characters);
 
@@ -70,7 +72,7 @@
 		for (let character of characters) {
 			for (let todoGroup of character.todoGroups) {
 				for (let todo of todoGroup) {
-					if (todo instanceof BonusGaugeTodo) {
+					if (todo instanceof CheckTodo) {
 						todo.checkReset();
 					}
 					else if (todo instanceof BreakpointTodo) {
@@ -100,9 +102,21 @@
 	<div class="character-grid grid gap-4">
 		{#each characters as _character, i }
 			<CharacterItem bind:character={ _character }
+						   editMode={ editMode }
+						   characterIndex={ i }
 						   on:addTodo={ () => { characterTarget = i; addTodoModal = true; } }
 						   on:removeItem={ () => { removeConfirmModal = true; characterTarget = i; } }
-						   on:edit={ (e) => { characterTarget = i; groupTarget = e.detail.groupTarget; todoTargetIndex = e.detail.todoTargetIndex; todoTarget = e.detail.todoTarget; editTodoModal = true; } }
+						   on:editMode={ () => {
+							   if (editMode === i) editMode = -1;
+							   else editMode = i;
+						   } }
+						   on:edit={ (e) => {
+							   characterTarget = i;
+							   groupTarget = e.detail.groupTarget;
+							   todoTargetIndex = e.detail.todoTargetIndex;
+							   todoTarget = structuredClone(e.detail.todoTarget);
+							   editTodoModal = true;
+						   } }
 			/>
 		{/each}
 
@@ -150,7 +164,23 @@
 	<!-- 숙제 수정 Modal -->
 	<EditTodoModal
 		bind:open={ editTodoModal }
-		bind:target={ todoTarget }
+		target={ todoTarget }
+		on:confirm={ (data) => {
+			let target = characters[characterTarget].todoGroups[groupTarget][todoTargetIndex];
+
+			target.name = data.detail.name;
+
+			if (target instanceof CheckTodo) {
+				target.currentBonus = data.detail.currentBonus;
+				target.maxCount = data.detail.maxCount;
+				target.resetPeriod = data.detail.resetPeriod;
+				target.minBonus = data.detail.minBonus;
+			}
+
+			characters = characters;
+
+			editTodoModal = false;
+		} }
 		on:remove={ () => {
 			characters[characterTarget].todoGroups[groupTarget].splice(todoTargetIndex , 1);
 			characters = characters;

@@ -1,14 +1,13 @@
 interface Params {
 	name: string;
-	type: 'Default' | 'Check' | 'Breakpoint' | 'Bonus';
+	type: 'Default' | 'Check' | 'Breakpoint';
 	id: string;
 }
 
 export class Todo {
 	name: string;
-	type: 'Default' | 'Check' | 'Breakpoint' | 'Bonus' = 'Default';
+	type: 'Default' | 'Check' | 'Breakpoint' = 'Default';
 	id: string;
-	expanded: boolean;
 	memo: string;
 	important: boolean;
 
@@ -16,7 +15,6 @@ export class Todo {
 		this.name = name;
 		this.type = type;
 		this.id = id;
-		this.expanded = true;
 		this.memo = '';
 		this.important = false;
 	}
