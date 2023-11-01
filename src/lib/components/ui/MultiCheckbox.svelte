@@ -19,6 +19,6 @@ export { className as class };
             <Badge border color="none" class="py-0 px-1 !text-xs absolute -right-2.5 -top-2.5 font-semibold">{ current }</Badge>
         {/if}
     {:else}
-        <div class="w-5 h-5 border-2 border-gray-700 rounded"></div>
+        <div class="w-5 h-5 border-2 border-gray-700 dark:border-gray-200 rounded"></div>
     {/if}
 </div>
