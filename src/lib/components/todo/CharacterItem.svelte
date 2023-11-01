@@ -145,15 +145,19 @@
         {/each}
     </div>
 
-    <div class="w-full text-right mt-2">
-        <ButtonGroup class="h-6">
-            <!-- TODO: 그룹 관리 Button: 그룹 순서 변경, 그룹 추가 / 삭제 등 -->
-            <Button class="p-3" on:click={ () => { dispatch("modifyGroup"); } }><AdjustmentsHorizontalOutline class="w-3.5 h-3.5 focus:outline-0" /></Button>
-            <Tooltip>그룹 관리</Tooltip>
-            <Button class="p-3" on:click={ () => { dispatch("editMode"); } }><EditOutline class="w-4 h-4 focus:outline-0" /></Button>
-            <Tooltip class="">숙제 편집</Tooltip>
-            <!-- <Button class="p-3" on:click={ () => { dispatch("removeItem"); } }><CloseOutline class="w-3 h-3 focus:outline-0" /></Button> -->
-        </ButtonGroup>
+    <div class="w-full flex flex-row-reverse justify-between">
+
+        <div>
+            <Button color="light" class="p-3 w-14 h-6" on:click={ () => { dispatch("editMode"); } }><EditOutline class="w-4 h-4 focus:outline-0" /></Button>
+            <Tooltip>숙제 편집</Tooltip>
+        </div>
+
+        {#if editMode === characterIndex}
+            <div>
+                <Button color="red" class="p-3 w-14 h-6" on:click={ () => { dispatch("removeItem"); } }><CloseOutline class="w-3 h-3 focus:outline-0" /></Button>
+                <Tooltip>캐릭터 삭제</Tooltip>
+            </div>
+        {/if}
     </div>
 </Card>
 

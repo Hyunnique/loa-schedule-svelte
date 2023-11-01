@@ -140,6 +140,7 @@
 	<!-- 숙제 추가 Modal -->
 	<AddTodoModal
 		groupSize={ (characters[characterTarget] !== undefined ? characters[characterTarget].todoGroups.length : 0) }
+		groupTarget={ groupTarget }
 		bind:open={ addTodoModal }
 		on:addGroup={ () => {
 			characters[characterTarget].todoGroups.push([]);
