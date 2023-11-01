@@ -150,7 +150,7 @@ items.push(WeeklyTemplates.map(e => {
         } }>추가</Button>
         <Button on:click={ () => {
             if (type === "Check") {
-                dispatcher("create", {
+                dispatcher("createAll", {
                     targetGroup: group,
                     todo: new CheckTodo({
                         name: name,
@@ -162,7 +162,7 @@ items.push(WeeklyTemplates.map(e => {
                 });
             }
             else if (type === "Breakpoint") {
-                dispatcher("create", {
+                dispatcher("createAll", {
                     targetGroup: group,
                     todo: new BreakpointTodo({
                         name: name,
