@@ -11,6 +11,7 @@
     import {CheckTodo} from "$lib/classes/CheckTodo";
     import CheckTodoItem from "$lib/components/todo/CheckTodoItem.svelte";
     import {createEventDispatcher} from "svelte";
+    import AddTodoItem from "$lib/components/todo/AddTodoItem.svelte";
 
     export let character: Character;
     const dispatch = createEventDispatcher();
@@ -105,7 +106,7 @@
 
     <div class="flex flex-col gap-2">
         {#each character.todoGroups as todo, groupIndex}
-            {#if todo.length > 0 }
+            {#if todo.length > 0 || editMode === characterIndex}
                 <Listgroup class="border-2 dark:!bg-transparent">
                     {#each todo as work, i}
                         {#if work instanceof BreakpointTodo}
@@ -136,6 +137,9 @@
                             />
                         {/if}
                     {/each}
+                    {#if editMode === characterIndex}
+                        <AddTodoItem on:click={ () => { dispatch("addTodo", groupIndex); } } />
+                    {/if}
                 </Listgroup>
             {/if}
         {/each}
@@ -146,8 +150,6 @@
             <!-- TODO: 그룹 관리 Button: 그룹 순서 변경, 그룹 추가 / 삭제 등 -->
             <Button class="p-3" on:click={ () => { dispatch("modifyGroup"); } }><AdjustmentsHorizontalOutline class="w-3.5 h-3.5 focus:outline-0" /></Button>
             <Tooltip>그룹 관리</Tooltip>
-            <Button class="p-3" on:click={ () => { dispatch("addTodo"); } }><PlusOutline class="w-3.5 h-3.5 focus:outline-0" /></Button>
-            <Tooltip>숙제 추가</Tooltip>
             <Button class="p-3" on:click={ () => { dispatch("editMode"); } }><EditOutline class="w-4 h-4 focus:outline-0" /></Button>
             <Tooltip class="">숙제 편집</Tooltip>
             <!-- <Button class="p-3" on:click={ () => { dispatch("removeItem"); } }><CloseOutline class="w-3 h-3 focus:outline-0" /></Button> -->

@@ -104,7 +104,7 @@
 			<CharacterItem bind:character={ _character }
 						   editMode={ editMode }
 						   characterIndex={ i }
-						   on:addTodo={ () => { characterTarget = i; addTodoModal = true; } }
+						   on:addTodo={ (e) => { characterTarget = i; groupTarget = e.detail; addTodoModal = true; } }
 						   on:removeItem={ () => { removeConfirmModal = true; characterTarget = i; } }
 						   on:editMode={ () => {
 							   if (editMode === i) editMode = -1;
@@ -156,6 +156,7 @@
 				character.todoGroups[e.detail.targetGroup].push(structuredClone(e.detail.todo));
 				character.todoGroups = character.todoGroups;
 			});
+
 			characters = characters;
 			addTodoModal = false;
 		} }
