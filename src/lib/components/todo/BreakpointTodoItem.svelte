@@ -32,20 +32,18 @@
 <ListgroupItem class="p-0">
     <button
         class="w-full h-full p-3 hover:bg-gray-50 dark:hover:bg-gray-50 dark:hover:bg-opacity-10 cursor-pointer transition-opacity duration-150
-               { gold === 0 ? 'opacity-20 hover:opacity-100' : '' }"
+               { gold === 0 && !editMode ? 'opacity-20 hover:opacity-100' : '' }"
         on:click={ () => {
             if (editMode) {
                 dispatch("edit");
             } else {
-                data.expanded = !data.expanded;
+                ; // 클릭시 뭐하지?
             }
         }
     }>
         <div>
             <div
-                    class="flex justify-between items-center"
-                    class:order-1={ !data.expanded }
-                    class:order-3={ data.expanded }
+                    class="flex justify-between items-center order-3"
             >
                 <P class="order-0 text-left font-bold text-md">
                     { data.name }
@@ -58,30 +56,12 @@
                         <DatabaseOutline class="inline-block w-2.5 h-2.5 text-yellow-400 dark:text-yellow-200" />
                         <Span class="text-yellow-400 dark:text-yellow-200">{ gold }</Span>
                     {:else}
-                        {#if data.expanded}
-                            <CheckOutline class="inline-block w-4 h-4 text-green-400 dark:text-green-200" />
-                        {/if}
+                        <CheckOutline class="inline-block w-4 h-4 text-green-400 dark:text-green-200" />
                     {/if}
                 </P>
-
-                {#if !data.expanded}
-                    <Checkbox class="order-2 w-5 h-5" style="background-size: 0.8rem 0.8rem;" checked={ simpleChecked } on:click={ (e) => {
-                        e.stopPropagation();
-
-                        data.breakpoints.forEach(breakpoint => {
-                            breakpoint.done = (gold !== 0);
-                        });
-
-                        data.breakpoints = data.breakpoints;
-                    } } />
-                {/if}
-
-
             </div>
 
-            {#if data.expanded}
-                <BreakpointBar bind:breakpoints={ data.breakpoints } />
-            {/if}
+            <BreakpointBar bind:breakpoints={ data.breakpoints } />
         </div>
     </button>
 </ListgroupItem>

@@ -11,7 +11,5 @@ export class BreakpointTodo extends Todo {
 	constructor({ name, id, breakpoints }: Params) {
 		super({ name, type: 'Breakpoint', id });
 		this.breakpoints = breakpoints;
-
-		this.expanded = true;
 	}
 }
