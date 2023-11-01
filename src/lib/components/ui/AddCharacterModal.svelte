@@ -6,7 +6,6 @@
     import {Breakpoint} from "$lib/classes/Breakpoint";
     import {BreakpointTodo} from "$lib/classes/BreakpointTodo";
     import DailyTemplates from "$lib/templates/DailyTemplates";
-    import {BonusGaugeTodo} from "$lib/classes/BonusGaugeTodo";
     import {Character} from "$lib/classes/Character";
     import {CheckTodo} from "$lib/classes/CheckTodo";
 
@@ -135,15 +134,19 @@
 
                 for (let template of DailyTemplates) {
                     if (template.type == 'Bonus') {
-                        dailys.push(new BonusGaugeTodo({
+                        dailys.push(new CheckTodo({
                             name: template.name,
                             id: template.id,
-                            maxCount: template.maxCount
+                            isBonus: true,
+                            maxCount: template.maxCount,
+                            resetPeriod: 1
                         }));
                     } else if (template.type == 'Check') {
                         dailys.push(new CheckTodo({
                             name: template.name,
                             id: template.id,
+                            isBonus: false,
+                            maxCount: 1,
                             resetPeriod: 1
                         }));
                     }

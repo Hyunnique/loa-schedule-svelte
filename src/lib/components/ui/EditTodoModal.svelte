@@ -1,18 +1,15 @@
 <script lang="ts">
-    import {Button, Input, Modal, Select} from "flowbite-svelte";
+    import {Button, Checkbox, Input, Modal, Select} from "flowbite-svelte";
     import DailyTemplates from "$lib/templates/DailyTemplates";
     import WeeklyTemplates from "$lib/templates/WeeklyTemplates";
-    import {Todo} from "$lib/classes/Todo";
+    import type {Todo} from "$lib/classes/Todo";
     import {createEventDispatcher} from "svelte";
     import {CheckTodo} from "$lib/classes/CheckTodo";
     import type {Character} from "$lib/classes/Character";
     import ExclamationConfirmModal from "$lib/components/ui/ExclamationConfirmModal.svelte";
     export let open: boolean;
     let removeConfirmModal = false;
-    export let target = new Todo({ name: "", type: "Check", id: "" });
-
-    let name: string;
-    name = target.name;
+    export let target: Todo;
 
     const dispatch = createEventDispatcher();
 
@@ -34,14 +31,40 @@
     */
 </script>
 
-<Modal size="xs" bind:open={ open } outsideclose>
+<Modal size="xs" bind:open={ open }>
     <h3 class="mb-5 text-lg font-bold text-gray-500 dark:text-gray-400">숙제 수정</h3>
 
     <form class="flex flex-col space-y-6">
-        <Input type="text" bind:value={ name } />
+        <Input type="text" bind:value={ target.name } />
 
-        <div class="flex flex-row gap-2 flex-row-reverse">
-            <Button>수정</Button>
+        <Select bind:value={ target.type } placeholder="타입 선택..">
+            <option selected value="Check">체크</option>
+            <option value="Breakpoint">관문</option>
+        </Select>
+
+        {#if target.type === "Check"}
+            <Checkbox bind:checked={ target.isBonus }>휴식 게이지</Checkbox>
+
+            <div>
+                휴식 게이지
+                <Input type="text" bind:value={ target.currentBonus } />
+            </div>
+            <div>
+                최대 완료 횟수
+                <Input type="text" bind:value={ target.maxCount } />
+            </div>
+            <div>
+                초기화 주기 (일)
+                <Input type="text" bind:value={ target.resetPeriod } />
+            </div>
+            <div>
+                휴식 게이지 활성화 최소치
+                <Input type="text" bind:value={ target.minBonus } />
+            </div>
+        {/if}
+
+        <div class="flex flex-row-reverse gap-2">
+            <Button on:click={ () => { dispatch("confirm", target); } }>수정</Button>
             <Button color="red" on:click={ () => { removeConfirmModal = true; } }>삭제</Button>
         </div>
         <!--
@@ -55,11 +78,7 @@
             </Select>
             <Button class="basis-4/12" on:click={ () => { dispatcher("addGroup"); } }>그룹 추가</Button>
         </div>
-        <Select bind:value={ type } placeholder="타입 선택..">
-            <option selected value="Check">체크</option>
-            <option value="Bonus">휴식게이지</option>
-            <option value="Breakpoint">관문</option>
-        </Select>
+
         <Input bind:value={ resetPeriod } placeholder="초기화 주기 (일)" />
         <Button on:click={ () => { dispatcher("create", {
             targetGroup: group,
