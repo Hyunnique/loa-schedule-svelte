@@ -60,6 +60,8 @@ items.push(WeeklyTemplates.map(e => {
             todo: new CheckTodo({
                 name: name,
                 id: id,
+                isBonus: false,
+                maxCount: 1,
                 resetPeriod: resetPeriod
             })
         }); } }>추가</Button>
@@ -68,6 +70,8 @@ items.push(WeeklyTemplates.map(e => {
             todo: new CheckTodo({
                 name: name,
                 id: id,
+                isBonus: false,
+                maxCount: 1,
                 resetPeriod: resetPeriod
             })
         }); } }>일괄 추가</Button>
