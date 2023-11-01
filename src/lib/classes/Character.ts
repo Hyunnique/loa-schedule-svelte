@@ -8,6 +8,8 @@ interface Params {
 }
 
 export class Character {
+	version: string;
+
 	name: string;
 	itemLevel: number;
 	className: string;
@@ -15,6 +17,8 @@ export class Character {
 	todoGroups: Todo[][];
 
 	constructor({ name, itemLevel, className, serverName }: Params) {
+		this.version = '1.0';
+
 		this.name = name;
 		this.itemLevel = itemLevel;
 		this.className = className;
