@@ -5,8 +5,7 @@
     import {AdjustmentsHorizontalOutline, CloseOutline, EditOutline, PlusOutline} from "flowbite-svelte-icons";
     import BreakpointTodoItem from "$lib/components/todo/BreakpointTodoItem.svelte";
     import {BreakpointTodo} from "$lib/classes/BreakpointTodo";
-    import BonusGaugeTodoItem from "$lib/components/todo/BonusGaugeTodoItem.svelte";
-    import {BonusGaugeTodo} from "$lib/classes/BonusGaugeTodo";
+    import BonusGaugeTodoItem from "$lib/components/todo/CheckTodoItem.svelte";
 
     import ClassIcon from "$lib/components/ui/ClassIcon.svelte";
     import {CheckTodo} from "$lib/classes/CheckTodo";
@@ -15,18 +14,90 @@
 
     export let character: Character;
     const dispatch = createEventDispatcher();
-    let editMode = false;
+
+    export let editMode: number;
+    export let characterIndex: number;
+
+    let serverColor: 'primary' | 'blue' | 'dark' | 'red' | 'green' | 'yellow' | 'indigo' | 'purple' | 'pink' | 'none' | undefined;
+    let classColor: 'primary' | 'blue' | 'dark' | 'red' | 'green' | 'yellow' | 'indigo' | 'purple' | 'pink' | 'none' | undefined;
+    let levelColor: 'primary' | 'blue' | 'dark' | 'red' | 'green' | 'yellow' | 'indigo' | 'purple' | 'pink' | 'none' | undefined;
+
+    $: serverColor = getServerColor(character.serverName);
+    $: classColor = getClassColor(character.className);
+    $: levelColor = getLevelColor(character.itemLevel);
+
+    function getServerColor(serverName: string) {
+        switch (serverName) {
+            case "루페온": return "green";
+            case "니나브": return "yellow";
+            case "실리안": return "primary";
+            case "아만": return "dark";
+            case "아브렐슈드": return "purple";
+            case "카단": return "indigo";
+            case "카마인": return "red";
+            case "카제로스": return "pink";
+            default: return "none";
+        }
+    }
+
+    function getClassColor(className: string) {
+        switch (className) {
+            case "디스트로이어":
+            case "버서커":
+            case "슬레이어":
+            case "워로드":
+            case "홀리나이트":
+                return "dark";
+            case "기공사":
+            case "배틀마스터":
+            case "스트라이커":
+            case "인파이터":
+            case "창술사":
+                return "yellow";
+            case "건슬링어":
+            case "데빌헌터":
+            case "블래스터":
+            case "스카우터":
+            case "호크아이":
+                return "primary";
+            case "바드":
+            case "서머너":
+            case "소서리스":
+            case "아르카나":
+                return "purple";
+            case "데모닉":
+            case "리퍼":
+            case "블레이드":
+            case "소울이터":
+                return "indigo";
+            case "기상술사":
+            case "도화가":
+                return "pink";
+            default:
+                return "none";
+        }
+    }
+
+    function getLevelColor(level: number) {
+        if (level >= 1630) return "red";
+        else if (level >= 1610) return "indigo";
+        else if (level >= 1600) return "pink";
+        else if (level >= 1580) return "green";
+        else if (level >= 1540) return "yellow";
+        else if (level >= 1490) return "purple";
+        else return "dark";
+    }
 </script>
 
-<Card size="md" class="relative flex-col inline-block w-1/7 h-full !p-4 overflow-auto space-y-2">
-    <div class="flex w-full items-center justify-between pl-1 pr-1 gap-2">
+<Card size="md" class="relative flex-col inline-block w-1/7 h-full !p-4 overflow-auto space-y-2 { editMode === -1 || editMode === characterIndex ? '' : 'opacity-60' }">
+    <div class="flex w-full items-center justify-between px-1 gap-2">
         <P class="font-bold text-lg">{ character.name }</P>
         <ClassIcon size="sm" className={ character.className } />
     </div>
     <div class="flex w-full items-center justify-start gap-1 pl-1 mt-2 pb-2">
-        <Badge class="px-2">{ character.serverName }</Badge>
-        <Badge class="px-2">{ character.className }</Badge>
-        <Badge class="px-2">{ Math.floor(character.itemLevel) }</Badge>
+        <Badge color={ serverColor } border class="px-2">{ character.serverName }</Badge>
+        <Badge color={ classColor } border class="px-2">{ character.className }</Badge>
+        <Badge color={ levelColor } border class="px-2">{ Math.floor(character.itemLevel) }</Badge>
     </div>
 
     <div class="flex flex-col gap-2">
@@ -36,20 +107,7 @@
                     {#each todo as work, i}
                         {#if work instanceof BreakpointTodo}
                             <BreakpointTodoItem
-                                    editMode={ editMode }
-                                    bind:data={ work }
-                                    on:destroy={ () => { todo.splice(i, 1); character = character; } }
-                                    on:edit={ () => {
-                                        dispatch("edit", {
-                                            groupTarget: groupIndex,
-                                            todoTargetIndex: i,
-                                            todoTarget: work
-                                        });
-                                    } }
-                            />
-                        {:else if work instanceof BonusGaugeTodo}
-                            <BonusGaugeTodoItem
-                                    editMode={ editMode }
+                                    editMode={ editMode === characterIndex }
                                     bind:data={ work }
                                     on:destroy={ () => { todo.splice(i, 1); character = character; } }
                                     on:edit={ () => {
@@ -62,7 +120,7 @@
                             />
                         {:else if work instanceof CheckTodo}
                             <CheckTodoItem
-                                    editMode={ editMode }
+                                    editMode={ editMode === characterIndex }
                                     bind:data={ work }
                                     on:destroy={ () => { todo.splice(i, 1); character = character; } }
                                     on:edit={ () => {
@@ -87,7 +145,7 @@
             <Tooltip>그룹 관리</Tooltip>
             <Button class="p-3" on:click={ () => { dispatch("addTodo"); } }><PlusOutline class="w-3.5 h-3.5 focus:outline-0" /></Button>
             <Tooltip>숙제 추가</Tooltip>
-            <Button class="p-3" on:click={ () => { editMode = !editMode; } }><EditOutline class="w-4 h-4 focus:outline-0" /></Button>
+            <Button class="p-3" on:click={ () => { dispatch("editMode"); } }><EditOutline class="w-4 h-4 focus:outline-0" /></Button>
             <Tooltip class="">숙제 편집</Tooltip>
             <!-- <Button class="p-3" on:click={ () => { dispatch("removeItem"); } }><CloseOutline class="w-3 h-3 focus:outline-0" /></Button> -->
         </ButtonGroup>
