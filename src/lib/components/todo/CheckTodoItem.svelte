@@ -27,27 +27,11 @@
             } }
     >
         <div class="flex justify-between items-center order-1">
-            <div class="order-0 text-left font-bold text-md { editMode ? '' : 'flex gap-2 items-center' }">
+            <div class="order-0 text-left font-bold text-md flex gap-2 items-center">
                 <P class="order-0 text-left font-bold text-md">{ data.name }</P>
                 <div class="flex items-center gap-2">
-                    {#if editMode}
-                        <button class="p-1 border-2 rounded-full" on:click={ (e) => {
-                            e.stopPropagation();
-                            data.currentBonus = Math.max(0, data.currentBonus - 10);
-                        } }>
-                            <MinusOutline class="w-2.5 h-2.5" />
-                        </button>
-                    {/if}
                     {#if data.isBonus}
                         <div>{ data.currentBonus }</div>
-                    {/if}
-                    {#if editMode}
-                        <button class="p-1 border-2 rounded-full" on:click={ (e) => {
-                            e.stopPropagation();
-                            data.currentBonus = Math.min(100, data.currentBonus + 10);
-                        } }>
-                            <PlusOutline class="w-2.5 h-2.5" />
-                        </button>
                     {/if}
                 </div>
             </div>

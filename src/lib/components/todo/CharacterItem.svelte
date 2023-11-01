@@ -89,7 +89,10 @@
     }
 </script>
 
-<Card size="md" class="relative flex-col inline-block w-1/7 h-full !p-4 overflow-auto space-y-2 { editMode === -1 || editMode === characterIndex ? '' : 'opacity-60' }">
+<Card size="md" class="relative flex-col inline-block w-1/7 h-full !p-4 overflow-auto space-y-2
+                       { editMode === -1 || editMode === characterIndex ? '' : 'opacity-60' }
+                       { editMode === characterIndex ? 'bg-indigo-200 bg-opacity-40 dark:bg-indigo-200 dark:bg-opacity-20' : '' }"
+>
     <div class="flex w-full items-center justify-between px-1 gap-2">
         <P class="font-bold text-lg">{ character.name }</P>
         <ClassIcon size="sm" className={ character.className } />
