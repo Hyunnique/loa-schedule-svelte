@@ -4,7 +4,6 @@ import { Character } from '$lib/classes/Character';
 import type { Todo } from '$lib/classes/Todo';
 import { BreakpointTodo } from '$lib/classes/BreakpointTodo';
 import { Breakpoint } from '$lib/classes/Breakpoint';
-import { BonusGaugeTodo } from '$lib/classes/BonusGaugeTodo';
 import { CheckTodo } from '$lib/classes/CheckTodo';
 
 const characterDataTemp: string | null = browser ? localStorage.getItem('CharacterData') : null;
@@ -15,6 +14,8 @@ export const CharacterData = writable(
 
 function rebuild(data: Character[]) {
 	for (let i = 0; i < data.length; i++) {
+		// version 관련 처리 추가하기
+
 		const newTodoGroups: Todo[][] = [];
 
 		for (let j = 0; j < data[i].todoGroups.length; j++) {
@@ -54,42 +55,26 @@ function rebuild(data: Character[]) {
 						breakpoints: newBreakpoints
 					});
 
-					newTodo.expanded = bTodo.expanded;
 					newTodo.memo = bTodo.memo;
 					newTodo.important = bTodo.important;
 
 					newTodoGroups[j].push(newTodo);
-				}
-				else if (todo.type == 'Bonus') {
-					const nTodo: BonusGaugeTodo = todo as BonusGaugeTodo;
-					const newTodo: BonusGaugeTodo = new BonusGaugeTodo({
+				} else if (todo.type == 'Check') {
+					const nTodo: CheckTodo = todo as CheckTodo;
+					const newTodo: CheckTodo = new CheckTodo({
 						name: nTodo.name,
 						id: nTodo.id,
-						maxCount: nTodo.maxCount
+						isBonus: nTodo.isBonus,
+						maxCount: nTodo.maxCount,
+						resetPeriod: nTodo.resetPeriod
 					});
 
 					newTodo.done = nTodo.done;
 					newTodo.currentBonus = nTodo.currentBonus;
+					newTodo.minBonus = nTodo.minBonus;
 					newTodo.nextReset = nTodo.nextReset;
-					newTodo.expanded = nTodo.expanded;
 					newTodo.memo = nTodo.memo;
 					newTodo.important = nTodo.important;
-
-					newTodoGroups[j].push(newTodo);
-				}
-				else if (todo.type == 'Check') {
-					const cTodo: CheckTodo = todo as CheckTodo;
-					const newTodo: CheckTodo = new CheckTodo({
-						name: cTodo.name,
-						id: cTodo.id,
-						resetPeriod: cTodo.resetPeriod
-					});
-
-					newTodo.done = cTodo.done;
-					newTodo.nextReset = cTodo.nextReset;
-					newTodo.expanded = cTodo.expanded;
-					newTodo.memo = cTodo.memo;
-					newTodo.important = cTodo.important;
 
 					newTodoGroups[j].push(newTodo);
 				}

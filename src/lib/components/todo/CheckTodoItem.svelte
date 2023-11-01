@@ -5,9 +5,8 @@
 
     import type { Todo } from "$lib/classes/Todo";
     import type { Breakpoint } from "$lib/classes/Breakpoint";
-    import type {BonusGaugeTodo} from "$lib/classes/BonusGaugeTodo";
-    import BonusGaugeBar from "$lib/components/ui/BonusGaugeBar.svelte";
-    import type {CheckTodo} from "$lib/classes/CheckTodo";
+    import type { CheckTodo } from "$lib/classes/CheckTodo";
+    import MultiCheckbox from "$lib/components/ui/MultiCheckbox.svelte";
 
     export let data: CheckTodo;
     export let editMode: boolean;
@@ -16,23 +15,44 @@
 </script>
 
 <ListgroupItem class="p-0">
-    <button class="w-full h-full p-3 hover:bg-gray-50 dark:hover:bg-gray-50 dark:hover:bg-opacity-10 cursor-pointer" on:click={ () => {
-        if (editMode) {
-            dispatch("edit");
-        } else {
-            data.expanded = !data.expanded;
-        }
-     } }>
-        <div class="flex justify-between items-center { data.expanded ? 'order-3' : 'order-1' }">
+    <button class="w-full h-full p-3 hover:bg-gray-50 dark:hover:bg-gray-50 dark:hover:bg-opacity-10 cursor-pointer
+                   { (data.done === data.maxCount || data.currentBonus < data.minBonus) && !editMode ? 'opacity-20 hover:opacity-100' : '' }"
+            on:click={ () => {
+                if (editMode) {
+                    dispatch("edit");
+                } else {
+                    data.done--;
+                    if (data.done < 0) data.done = data.maxCount;
+                }
+            } }
+    >
+        <div class="flex justify-between items-center order-1">
             <div class="order-0 text-left font-bold text-md { editMode ? '' : 'flex gap-2 items-center' }">
                 <P class="order-0 text-left font-bold text-md">{ data.name }</P>
+                <div class="flex items-center gap-2">
+                    {#if editMode}
+                        <button class="p-1 border-2 rounded-full" on:click={ (e) => {
+                            e.stopPropagation();
+                            data.currentBonus = Math.max(0, data.currentBonus - 10);
+                        } }>
+                            <MinusOutline class="w-2.5 h-2.5" />
+                        </button>
+                    {/if}
+                    {#if data.isBonus}
+                        <div>{ data.currentBonus }</div>
+                    {/if}
+                    {#if editMode}
+                        <button class="p-1 border-2 rounded-full" on:click={ (e) => {
+                            e.stopPropagation();
+                            data.currentBonus = Math.min(100, data.currentBonus + 10);
+                        } }>
+                            <PlusOutline class="w-2.5 h-2.5" />
+                        </button>
+                    {/if}
+                </div>
             </div>
 
-            <Checkbox class="order-2 w-5 h-5" style="background-size: 0.8rem 0.8rem;" bind:checked={ data.done } on:click={
-                (e) => {
-                    e.stopPropagation();
-                }
-            } />
+            <MultiCheckbox bind:current={ data.done } bind:max={ data.maxCount } />
         </div>
     </button>
 </ListgroupItem>
