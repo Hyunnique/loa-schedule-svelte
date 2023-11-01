@@ -2,12 +2,12 @@
     import {Button, Input, Modal, Select} from "flowbite-svelte";
     import DailyTemplates from "$lib/templates/DailyTemplates";
     import WeeklyTemplates from "$lib/templates/WeeklyTemplates";
-    import type {Todo} from "$lib/classes/Todo";
     import {createEventDispatcher, onMount} from "svelte";
     import {CheckTodo} from "$lib/classes/CheckTodo";
     import {BreakpointTodo} from "$lib/classes/BreakpointTodo";
     import {Breakpoint} from "$lib/classes/Breakpoint";
-export let open: boolean;
+
+    export let open: boolean;
 export let groupSize: number;
 export let groupTarget: number;
 
@@ -69,14 +69,12 @@ function applyTemplate(templateId: string) {
     else if (template!.type === "Weekly") {
         let originalTemplate = WeeklyTemplates.find(x => x.id === template!.value);
 
-        let templateBuilder = originalTemplate!.breakpoints.map(e => {
+        targetBreakpoints = originalTemplate!.breakpoints.map(e => {
             return new Breakpoint({
                 ...e,
                 id: template!.value
             });
         });
-
-        targetBreakpoints = templateBuilder;
 
         type = "Breakpoint";
     }
