@@ -171,8 +171,11 @@
 			let target = characters[characterTarget].todoGroups[groupTarget][todoTargetIndex];
 
 			target.name = data.detail.name;
+			target.memo = data.detail.memo;
+			target.important = data.detail.important;
 
 			if (target instanceof CheckTodo) {
+				target.isBonus = data.detail.isBonus;
 				target.currentBonus = data.detail.currentBonus;
 				target.maxCount = data.detail.maxCount;
 				target.resetPeriod = data.detail.resetPeriod;

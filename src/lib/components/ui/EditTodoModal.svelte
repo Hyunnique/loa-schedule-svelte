@@ -1,71 +1,93 @@
 <script lang="ts">
-    import {Button, Checkbox, Input, Modal, Select} from "flowbite-svelte";
+    import {Button, Checkbox, FloatingLabelInput, Input, Modal, Select, Span} from "flowbite-svelte";
     import DailyTemplates from "$lib/templates/DailyTemplates";
     import WeeklyTemplates from "$lib/templates/WeeklyTemplates";
-    import type {Todo} from "$lib/classes/Todo";
+    import {Todo} from "$lib/classes/Todo";
     import {createEventDispatcher} from "svelte";
-    import {CheckTodo} from "$lib/classes/CheckTodo";
+    import type {CheckTodo} from "$lib/classes/CheckTodo";
     import type {Character} from "$lib/classes/Character";
     import ExclamationConfirmModal from "$lib/components/ui/ExclamationConfirmModal.svelte";
+    import type {BreakpointTodo} from "$lib/classes/BreakpointTodo";
     export let open: boolean;
     let removeConfirmModal = false;
-    export let target: Todo;
+    export let target: Todo = new Todo({ name: "", type: "Check", id: "" });
+
+    interface FormData {
+        name: string;
+        type: string;
+        important: boolean;
+        memo: string;
+        isBonus: boolean;
+        currentBonus: number;
+        maxCount: number;
+        resetPeriod: number;
+        minBonus: number;
+    }
 
     const dispatch = createEventDispatcher();
 
+    $: initForm(target);
 
-    /*
-    items.push(DailyTemplates.map(e => {
-        return {
-            type: e.type,
-            name: e.name,
-            id: e.id
+    let formData: FormData;
+
+    function initForm(target: Todo) {
+        if (target.type == "Breakpoint") {
+            let nTarget = target as BreakpointTodo;
+            formData = {
+                name: nTarget.name,
+                type: nTarget.type,
+                important: nTarget.important,
+                memo: nTarget.memo,
+                isBonus: false,
+                currentBonus: 0,
+                maxCount: 0,
+                resetPeriod: 0,
+                minBonus: 0
+            }
+        } else {
+            let nTarget = target as CheckTodo;
+
+            formData = {
+                name: nTarget.name,
+                type: nTarget.type,
+                important: nTarget.important,
+                memo: nTarget.memo,
+                isBonus: nTarget.isBonus,
+                currentBonus: nTarget.currentBonus,
+                maxCount: nTarget.maxCount,
+                resetPeriod: nTarget.resetPeriod,
+                minBonus: nTarget.minBonus
+            }
         }
-    }));
-    items.push(WeeklyTemplates.map(e => {
-        return {
-            type: e.type,
-            name: e.name,
-            id: e.id
-        }
-    }));
-    */
+    }
 </script>
 
 <Modal size="xs" bind:open={ open }>
     <h3 class="mb-5 text-lg font-bold text-gray-500 dark:text-gray-400">숙제 수정</h3>
 
     <form class="flex flex-col space-y-6">
-        <Input type="text" bind:value={ target.name } />
+        <div class="flex gap-3">
+            <div class="basis-2/3">
+                <FloatingLabelInput type="text" style="outlined" bind:value={ formData.name } label="숙제 이름" />
+            </div>
+            <Select class="basis-1/3" bind:value={ formData.type } placeholder="타입 선택..">
+                <option selected value="Check">체크</option>
+                <option value="Breakpoint">관문</option>
+            </Select>
+        </div>
+        <Checkbox bind:checked={ formData.important }>중요</Checkbox>
+        <FloatingLabelInput type="text" style="outlined" bind:value={ formData.memo } label="메모" />
+        <FloatingLabelInput type="text" style="outlined" bind:value={ formData.maxCount } label="최대 완료 횟수" />
+        <FloatingLabelInput type="text" style="outlined" bind:value={ formData.resetPeriod } label="초기화 주기 (일)" />
+        <Checkbox bind:checked={ formData.isBonus }>휴식 게이지 사용</Checkbox>
 
-        <Select bind:value={ target.type } placeholder="타입 선택..">
-            <option selected value="Check">체크</option>
-            <option value="Breakpoint">관문</option>
-        </Select>
-
-        {#if target.type === "Check"}
-            <Checkbox bind:checked={ target.isBonus }>휴식 게이지</Checkbox>
-
-            <div>
-                휴식 게이지
-                <Input type="text" bind:value={ target.currentBonus } />
-            </div>
-            <div>
-                최대 완료 횟수
-                <Input type="text" bind:value={ target.maxCount } />
-            </div>
-            <div>
-                초기화 주기 (일)
-                <Input type="text" bind:value={ target.resetPeriod } />
-            </div>
-            <div>
-                휴식 게이지 활성화 최소치
-                <Input type="text" bind:value={ target.minBonus } />
-            </div>
+        {#if formData.isBonus}
+            <FloatingLabelInput type="text" style="outlined" bind:value={ formData.currentBonus } label="휴식 게이지" />
+            <FloatingLabelInput type="text" style="outlined" bind:value={ formData.minBonus } label="비활성화 기준 (휴식 게이지)" />
         {/if}
 
         <div class="flex flex-row-reverse gap-2">
-            <Button on:click={ () => { dispatch("confirm", target); } }>수정</Button>
+            <Button on:click={ () => { dispatch("confirm", formData); } }>수정</Button>
             <Button color="red" on:click={ () => { removeConfirmModal = true; } }>삭제</Button>
         </div>
         <!--

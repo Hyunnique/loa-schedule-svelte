@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import {A, Checkbox, ListgroupItem, P, Span} from "flowbite-svelte";
-    import { CheckOutline, DatabaseOutline } from "flowbite-svelte-icons";
+    import {CheckOutline, DatabaseOutline, FileOutline} from "flowbite-svelte-icons";
 
     import type { Todo } from "$lib/classes/Todo";
     import type { Breakpoint } from "$lib/classes/Breakpoint";
@@ -15,7 +15,6 @@
     const dispatch = createEventDispatcher();
 
     $: gold = sumGold(data.breakpoints);
-    $: simpleChecked = gold === 0; // 이렇게 하지 말고 Child:onchange에서 0 or all일 경우 핸들링
 
     function sumGold(breakpoints: Breakpoint[]) {
         let result: number = 0;
@@ -31,16 +30,22 @@
 
 <ListgroupItem class="p-0">
     <button
-        class="w-full h-full p-3 hover:bg-gray-50 dark:hover:bg-gray-50 dark:hover:bg-opacity-10 cursor-pointer transition-opacity duration-150
-               { gold === 0 && !editMode ? 'opacity-20 hover:opacity-100' : '' }"
+        class="w-full h-full px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-50 dark:hover:bg-opacity-10 cursor-pointer transition-opacity duration-150
+               { gold === 0 && !editMode ? 'opacity-20 hover:opacity-100' : '' }
+               { data.important ? 'bg-red-100 hover:bg-red-50 dark:bg-opacity-20' : '' }"
         on:click={ () => {
             if (editMode) {
                 dispatch("edit");
             } else {
                 ; // 클릭시 뭐하지?
             }
-        }
-    }>
+        } }
+        on:contextmenu={ (e) => {
+            e.preventDefault();
+            dispatch("edit");
+            return false;
+        } }
+    >
         <div>
             <div
                     class="flex justify-between items-center order-3"
@@ -63,6 +68,12 @@
 
             <BreakpointBar bind:breakpoints={ data.breakpoints } />
         </div>
+        {#if data.memo.length > 0}
+            <div class="flex gap-1 items-center mt-2">
+                <FileOutline class="w-4 h-4 text-amber-400 dark:text-amber-200" />
+                <Span class="font-semibold text-xs tracking-tighter text-gray-600 dark:text-gray-200">{ data.memo }</Span>
+            </div>
+        {/if}
     </button>
 </ListgroupItem>
 
