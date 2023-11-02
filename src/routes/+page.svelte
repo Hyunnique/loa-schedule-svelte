@@ -20,6 +20,7 @@
 	import EditTodoModal from "$lib/components/ui/EditTodoModal.svelte";
 	import ExclamationConfirmModal from "$lib/components/ui/ExclamationConfirmModal.svelte";
 	import {CheckTodo} from "$lib/classes/CheckTodo";
+	import SortableList from "$lib/components/ui/SortableList.svelte";
 
 	let characters: Character[] = get(CharacterData);
 
@@ -116,6 +117,9 @@
 							   todoTargetIndex = e.detail.todoTargetIndex;
 							   todoTarget = structuredClone(e.detail.todoTarget);
 							   editTodoModal = true;
+						   } }
+						   on:removeGroup={ (e) => {
+							   alert("그룹 삭제 미구현");
 						   } }
 			/>
 		{/each}

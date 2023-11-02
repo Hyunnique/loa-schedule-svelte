@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import {A, Checkbox, ListgroupItem, P, Span} from "flowbite-svelte";
-    import {CirclePlusOutline} from "flowbite-svelte-icons";
+    import {CirclePlusOutline, CloseCircleSolid, MinusOutline} from "flowbite-svelte-icons";
 
     const dispatch = createEventDispatcher();
 </script>
@@ -9,8 +9,8 @@
 <ListgroupItem class="p-0">
     <button class="flex items-center gap-2 justify-center w-full h-full p-3 hover:bg-gray-50 dark:hover:bg-gray-50 dark:hover:bg-opacity-10 cursor-pointer"
             on:click={ () => { dispatch("click"); } }>
-        <CirclePlusOutline class="inline-block"/>
-        <Span>항목 추가</Span>
+        <CloseCircleSolid class="inline-block text-red-600 dark:text-red-400" />
+        <Span class="text-red-600 dark:text-red-400">그룹 삭제</Span>
     </button>
 </ListgroupItem>
 

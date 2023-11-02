@@ -11,7 +11,8 @@
     import {CheckTodo} from "$lib/classes/CheckTodo";
     import CheckTodoItem from "$lib/components/todo/CheckTodoItem.svelte";
     import {createEventDispatcher} from "svelte";
-    import AddTodoItem from "$lib/components/todo/AddTodoItem.svelte";
+    import AddTodoItem from "$lib/components/ui/AddTodoItem.svelte";
+    import RemoveGroupItem from "$lib/components/ui/RemoveGroupItem.svelte";
 
     export let character: Character;
     const dispatch = createEventDispatcher();
@@ -139,6 +140,9 @@
                     {/each}
                     {#if editMode === characterIndex}
                         <AddTodoItem on:click={ () => { dispatch("addTodo", groupIndex); } } />
+                        {#if todo.length === 0}
+                            <RemoveGroupItem on:click={ () => { dispatch("removeGroup", groupIndex); } } />
+                        {/if}
                     {/if}
                 </Listgroup>
             {/if}
