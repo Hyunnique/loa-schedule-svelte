@@ -8,8 +8,6 @@
     import {Breakpoint} from "$lib/classes/Breakpoint";
 
     export let open: boolean;
-export let groupSize: number;
-export let groupTarget: number;
 
 interface Template {
     name: string;

@@ -67,6 +67,8 @@
 	onMount(async () => {
 		checkReset();
 		if (checkResetTimer !== -1) checkResetTimer = setInterval(checkReset, 5 * 1000 * 60);
+
+		console.log(characters);
 	});
 
 	function checkReset() {
@@ -180,10 +182,10 @@
 
 			if (target instanceof CheckTodo) {
 				target.isBonus = data.detail.isBonus;
-				target.currentBonus = data.detail.currentBonus;
-				target.maxCount = data.detail.maxCount;
-				target.resetPeriod = data.detail.resetPeriod;
-				target.minBonus = data.detail.minBonus;
+				target.currentBonus = parseInt(data.detail.currentBonus);
+				target.maxCount = parseInt(data.detail.maxCount);
+				target.resetPeriod = parseInt(data.detail.resetPeriod);
+				target.minBonus = parseInt(data.detail.minBonus);
 			}
 
 			characters = characters;
