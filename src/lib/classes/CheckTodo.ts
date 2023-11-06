@@ -46,10 +46,7 @@ export class CheckTodo extends Todo {
 	checkReset() {
 		const now: Date = new Date();
 		if (this.nextReset <= now.getTime()) {
-			console.log(this);
-			console.log("휴식 게이지 : " + this.currentBonus + "->");
 			let diff: number = now.getTime() - this.nextReset;
-			console.log("diff : " + diff);
 			diff = Math.floor(diff / 1000 / 60 / 60 / 24) + 1;
 
 			if (this.isBonus) {
@@ -59,10 +56,9 @@ export class CheckTodo extends Todo {
 
 				this.currentBonus = this.currentBonus + Math.floor(Math.floor(diff * this.maxCount - this.done) * 10);
 				if (this.currentBonus >= 100) this.currentBonus = 100;
-			} // TODO: 수정 모달에서 input을 그대로 받아와서 string으로 저장되고 있었음, 수정해야함
+			}
 
 			this.done = 0;
-			console.log("휴식 게이지 : " + this.currentBonus);
 			this.nextReset = this.calculateNextReset();
 		}
 	}
