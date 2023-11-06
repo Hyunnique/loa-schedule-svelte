@@ -8,9 +8,6 @@ dependencies:
   flowbite-svelte-icons:
     specifier: ^0.4.4
     version: 0.4.4(svelte@4.2.1)(tailwind-merge@1.14.0)(tailwindcss@3.3.3)
-  sortablejs:
-    specifier: ^1.15.0
-    version: 1.15.0
 
 devDependencies:
   '@fontsource/fira-mono':
@@ -31,6 +28,9 @@ devDependencies:
   '@types/cookie':
     specifier: ^0.5.1
     version: 0.5.2
+  '@types/sortablejs':
+    specifier: ^1.15.4
+    version: 1.15.4
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.0.0
     version: 6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
@@ -67,6 +67,9 @@ devDependencies:
   prettier-plugin-svelte:
     specifier: ^2.10.1
     version: 2.10.1(prettier@2.8.8)(svelte@4.2.1)
+  sortablejs:
+    specifier: ^1.15.0
+    version: 1.15.0
   svelte:
     specifier: ^4.0.5
     version: 4.2.1
@@ -538,6 +541,10 @@ packages:
 
   /@types/semver@7.5.3:
     resolution: {integrity: sha512-OxepLK9EuNEIPxWNME+C6WwbRAOOI2o2BaQEGzz5Lu2e4Z5eDnEo+/aVEDMIXywoJitJ7xWd641wrGLZdtwRyw==}
+    dev: true
+
+  /@types/sortablejs@1.15.4:
+    resolution: {integrity: sha512-7oL7CcPSfoyoNx3Ba1+79ykJzpEKVhHUyfAiN5eT/FoeDXOR3eBDLXf9ndDNuxaExmjpI+zVi2dMMuaoXUOzNA==}
     dev: true
 
   /@typescript-eslint/eslint-plugin@6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2):
@@ -1899,7 +1906,7 @@ packages:
 
   /sortablejs@1.15.0:
     resolution: {integrity: sha512-bv9qgVMjUMf89wAvM6AxVvS/4MX3sPeN0+agqShejLU5z5GX4C75ow1O2e5k4L6XItUyAK3gH6AxSbXrOM5e8w==}
-    dev: false
+    dev: true
 
   /source-map-js@1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}

@@ -16,6 +16,8 @@
     let searchResults: Character[] = [];
     let searchChecked: boolean[] = [];
 
+    let test: number;
+
     $: clear(open);
 
     function clear(status: boolean) {
@@ -53,6 +55,8 @@
     function doSearch(name: string) {
         let characterResults: Character[] = [];
         searchChecked = [];
+
+        let characterIdIndex = characters.length;
 
         fetch(`/api/character/${name}`, { method: "GET" })
         .then(response => response.json())
@@ -153,6 +157,7 @@
                 }
 
                 let characterObj: Character = new Character({
+                    id: characterIdIndex++,
                     name: character.CharacterName,
                     itemLevel: itemLevel,
                     className: character.CharacterClassName,

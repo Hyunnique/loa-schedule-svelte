@@ -1,28 +1,29 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { get } from "svelte/store";
+	import Sortable, {type SortableEvent} from "sortablejs";
 
 	import type { Character } from "$lib/classes/Character";
-
 	import { BreakpointTodo } from "$lib/classes/BreakpointTodo";
-
-	import CharacterItem from '$lib/components/todo/CharacterItem.svelte';
+	import type { Todo } from "$lib/classes/Todo";
+	import { CheckTodo } from "$lib/classes/CheckTodo";
 
 	import { CharacterData } from "../stores/CharacterData";
 	import { OverallData } from "../stores/OverallData";
 
-	import {Button, Input, Modal, P } from "flowbite-svelte";
+	import CharacterItem from '$lib/components/todo/CharacterItem.svelte';
 	import AddCharacterItem from "$lib/components/todo/AddCharacterItem.svelte";
 	import AddCharacterModal from "$lib/components/ui/AddCharacterModal.svelte";
-	import {ExclamationCircleOutline} from "flowbite-svelte-icons";
 	import AddTodoModal from "$lib/components/ui/AddTodoModal.svelte";
-	import type {Todo} from "$lib/classes/Todo";
 	import EditTodoModal from "$lib/components/ui/EditTodoModal.svelte";
 	import ExclamationConfirmModal from "$lib/components/ui/ExclamationConfirmModal.svelte";
-	import {CheckTodo} from "$lib/classes/CheckTodo";
-	import SortableList from "$lib/components/ui/SortableList.svelte";
+
+	import { P } from "flowbite-svelte";
+	//import SortableList from "$lib/components/ui/SortableList.svelte";
 
 	let characters: Character[] = get(CharacterData);
+
+	let characterEl: HTMLElement;
 
 	let createCharacterModal = false;
 	let removeConfirmModal = false;
@@ -35,7 +36,8 @@
 	let todoTarget: Todo;
 	let todoTargetIndex = 0;
 
-	let editMode = -1;
+	let editMode = -1; // TODO: 인덱스 말고 Character name으로 체크하기
+	// TODO: Character name 유니크하게 만들기
 
 	$: CharacterData.set(characters);
 
@@ -67,10 +69,40 @@
 	onMount(async () => {
 		checkReset();
 		if (checkResetTimer !== -1) checkResetTimer = setInterval(checkReset, 5 * 1000 * 60);
-
-		console.log(characters);
 	});
 
+	function initSortable(list: HTMLElement) {
+		const sortable = new Sortable(list, {
+			group: "charactersGroup",
+			filter: ".sortable-static",
+			animation: 150,
+			onMove(e) {
+				return e.related.className.indexOf('sortable-static') === -1;
+			},
+			onSort(e) {
+				const order = sortable.toArray();
+				order.splice(order.length - 1, 1);
+
+				const allItems = characters.flat();
+				characters = order.map(id => {
+					return allItems.find(item => item.id == parseInt(id))!
+				});
+
+				console.log(characters);
+			}
+		})
+	}
+	function handleSortCharacter(e: SortableEvent) {
+
+		const target = characters[e.oldIndex!];
+		characters.splice(e.oldIndex!, 1);
+		characters.splice(e.newIndex!, 0, target);
+
+		characters = characters;
+		console.log(characters);
+	}
+
+	// 모든 숙제에 대해서 checkReset 호출
 	function checkReset() {
 		for (let character of characters) {
 			for (let todoGroup of character.todoGroups) {
@@ -88,6 +120,8 @@
 		}
 	}
 
+
+
 	function rearrangeCharacters() {
 		// 모두 완료된 캐릭터는 설정 여부에 따라 뒤로 숨기기
 	}
@@ -102,8 +136,8 @@
 	<P class="text-md font-bold p-2 mb-2">총 흭득한 주간 골드 : { earnedGold.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") } / { totalGold.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</P>
 
 	<!-- CharacterItem List -->
-	<div class="character-grid grid gap-4">
-		{#each characters as _character, i }
+	<div class="character-grid grid gap-4" bind:this={ characterEl } use:initSortable>
+		{#each characters as _character, i (_character.name)}
 			<CharacterItem bind:character={ _character }
 						   editMode={ editMode }
 						   characterIndex={ i }
@@ -121,7 +155,7 @@
 							   editTodoModal = true;
 						   } }
 						   on:removeGroup={ (e) => {
-							   alert("그룹 삭제 미구현");
+
 						   } }
 			/>
 		{/each}
@@ -145,22 +179,20 @@
 
 	<!-- 숙제 추가 Modal -->
 	<AddTodoModal
-		groupSize={ (characters[characterTarget] !== undefined ? characters[characterTarget].todoGroups.length : 0) }
-		groupTarget={ groupTarget }
 		bind:open={ addTodoModal }
 		on:addGroup={ () => {
 			characters[characterTarget].todoGroups.push([]);
 			characters = characters;
 		} }
 		on:create={ (e) => {
-			characters[characterTarget].todoGroups[e.detail.targetGroup].push(e.detail.todo);
+			characters[characterTarget].todoGroups[groupTarget].push(e.detail.todo);
 			characters = characters;
 			addTodoModal = false;
 		} }
 		on:createAll={ (e) => {
 			characters.forEach(character => {
-				while (character.todoGroups.length <= e.detail.targetGroup) character.todoGroups.push([]);
-				character.todoGroups[e.detail.targetGroup].push(structuredClone(e.detail.todo));
+				while (character.todoGroups.length <= groupTarget) character.todoGroups.push([]);
+				character.todoGroups[groupTarget].push(structuredClone(e.detail.todo));
 				character.todoGroups = character.todoGroups;
 			});
 

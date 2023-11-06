@@ -77,13 +77,13 @@
         </div>
         <Checkbox bind:checked={ formData.important }>중요</Checkbox>
         <FloatingLabelInput type="text" style="outlined" bind:value={ formData.memo } label="메모" />
-        <FloatingLabelInput type="text" style="outlined" bind:value={ formData.maxCount } label="최대 완료 횟수" />
-        <FloatingLabelInput type="text" style="outlined" bind:value={ formData.resetPeriod } label="초기화 주기 (일)" />
+        <FloatingLabelInput type="number" min="0" style="outlined" bind:value={ formData.maxCount } label="최대 완료 횟수" />
+        <FloatingLabelInput type="number" min="0" style="outlined" bind:value={ formData.resetPeriod } label="초기화 주기 (일)" />
         <Checkbox bind:checked={ formData.isBonus }>휴식 게이지 사용</Checkbox>
 
         {#if formData.isBonus}
-            <FloatingLabelInput type="text" style="outlined" bind:value={ formData.currentBonus } label="휴식 게이지" />
-            <FloatingLabelInput type="text" style="outlined" bind:value={ formData.minBonus } label="비활성화 기준 (휴식 게이지)" />
+            <FloatingLabelInput type="number" min="0" max="100" style="outlined" bind:value={ formData.currentBonus } label="휴식 게이지" />
+            <FloatingLabelInput type="number" min="0" max="100" style="outlined" bind:value={ formData.minBonus } label="비활성화 기준 (휴식 게이지)" />
         {/if}
 
         <div class="flex flex-row-reverse gap-2">

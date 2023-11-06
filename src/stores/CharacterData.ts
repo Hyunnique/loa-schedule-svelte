@@ -82,6 +82,7 @@ function rebuild(data: Character[]) {
 		}
 
 		data[i] = new Character({
+			id: data[i].id,
 			name: data[i].name,
 			itemLevel: data[i].itemLevel,
 			className: data[i].className,

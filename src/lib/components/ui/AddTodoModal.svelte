@@ -114,8 +114,8 @@ items.push(WeeklyTemplates.map(e => {
             <option value="Breakpoint">관문</option>
         </Select>
         {#if type === "Check"}
-            <FloatingLabelInput type="text" style="outlined" bind:value={ maxCount } label="최대 완료 횟수" />
-            <FloatingLabelInput type="text" style="outlined" bind:value={ resetPeriod } label="초기화 주기 (일)" />
+            <FloatingLabelInput type="number" min="0" style="outlined" bind:value={ maxCount } label="최대 완료 횟수" />
+            <FloatingLabelInput type="number" min="0" style="outlined" bind:value={ resetPeriod } label="초기화 주기 (일)" />
         {:else if type === "Breakpoint"}
 
         {/if}

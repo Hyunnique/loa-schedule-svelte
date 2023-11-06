@@ -13,6 +13,7 @@
     import {createEventDispatcher} from "svelte";
     import AddTodoItem from "$lib/components/ui/AddTodoItem.svelte";
     import RemoveGroupItem from "$lib/components/ui/RemoveGroupItem.svelte";
+    import Sortable from "sortablejs";
 
     export let character: Character;
     const dispatch = createEventDispatcher();
@@ -89,9 +90,33 @@
         else if (level >= 1490) return "purple";
         else return "dark";
     }
+/*
+    function initSortable(list: HTMLElement) {
+        const sortable = new Sortable(list, {
+            group: "charactersGroup",
+            filter: ".sortable-static",
+            animation: 150,
+            onMove(e) {
+                return e.related.className.indexOf('sortable-static') === -1;
+            },
+            onSort(e) {
+                const order = sortable.toArray();
+                order.splice(order.length - 1, 1);
+
+                const allItems = characters.flat();
+                characters = order.map(id => {
+                    return allItems.find(item => item.id == parseInt(id))!
+                });
+
+                console.log(characters);
+            }
+        })
+    }
+
+ */
 </script>
 
-<Card size="md" class="relative flex-col inline-block w-1/7 h-full !p-4 overflow-auto space-y-2
+<Card size="md" data-id={ character.id } class="relative flex-col inline-block w-1/7 h-full !p-4 overflow-auto space-y-2
                        { editMode === -1 || editMode === characterIndex ? '' : 'opacity-60' }
                        { editMode === characterIndex ? 'bg-indigo-200 bg-opacity-40 dark:bg-indigo-200 dark:bg-opacity-20' : '' }"
 >
