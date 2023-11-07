@@ -16,8 +16,6 @@
     let searchResults: Character[] = [];
     let searchChecked: boolean[] = [];
 
-    let test: number;
-
     $: clear(open);
 
     function clear(status: boolean) {

@@ -38,6 +38,7 @@
 
 	let editMode = -1; // TODO: 인덱스 말고 Character name으로 체크하기
 	// TODO: Character name 유니크하게 만들기
+	// TODO: 숙제도 Sortable 구현, 잡고 정렬할 handle 만들기, itemLevel update
 
 	$: CharacterData.set(characters);
 
@@ -120,8 +121,6 @@
 		}
 	}
 
-
-
 	function rearrangeCharacters() {
 		// 모두 완료된 캐릭터는 설정 여부에 따라 뒤로 숨기기
 	}
@@ -162,23 +161,24 @@
 
 		<AddCharacterItem bind:modal={ createCharacterModal } />
 	</div>
+</section>
 
-	<!-- 캐릭터 삭제 확인 Modal -->
-	<ExclamationConfirmModal
-			bind:open={ removeConfirmModal }
-			on:confirm={ () => {
+<!-- 캐릭터 삭제 확인 Modal -->
+<ExclamationConfirmModal
+		bind:open={ removeConfirmModal }
+		on:confirm={ () => {
 				characters.splice(characterTarget, 1);
 				characters = characters;
 				removeConfirmModal = false;
 			} }
-			on:cancel={ () => { removeConfirmModal = false; } }
-	/>
+		on:cancel={ () => { removeConfirmModal = false; } }
+/>
 
-	<!-- 캐릭터 추가 Modal -->
-	<AddCharacterModal bind:characters={ characters } bind:open={ createCharacterModal } />
+<!-- 캐릭터 추가 Modal -->
+<AddCharacterModal bind:characters={ characters } bind:open={ createCharacterModal } />
 
-	<!-- 숙제 추가 Modal -->
-	<AddTodoModal
+<!-- 숙제 추가 Modal -->
+<AddTodoModal
 		bind:open={ addTodoModal }
 		on:addGroup={ () => {
 			characters[characterTarget].todoGroups.push([]);
@@ -199,10 +199,10 @@
 			characters = characters;
 			addTodoModal = false;
 		} }
-	/>
+/>
 
-	<!-- 숙제 수정 Modal -->
-	<EditTodoModal
+<!-- 숙제 수정 Modal -->
+<EditTodoModal
 		bind:open={ editTodoModal }
 		target={ todoTarget }
 		on:confirm={ (data) => {
@@ -228,8 +228,7 @@
 			characters[characterTarget].todoGroups[groupTarget].splice(todoTargetIndex , 1);
 			characters = characters;
 		} }
-	/>
-</section>
+/>
 
 <style>
 	.character-grid {
