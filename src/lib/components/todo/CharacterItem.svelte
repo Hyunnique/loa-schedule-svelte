@@ -2,7 +2,13 @@
     import type { Character } from "$lib/classes/Character";
 
     import {Badge, Button, ButtonGroup, Card, Listgroup, P, Span, Tooltip} from "flowbite-svelte";
-    import {AdjustmentsHorizontalOutline, CloseOutline, EditOutline, PlusOutline} from "flowbite-svelte-icons";
+    import {
+        AdjustmentsHorizontalOutline,
+        BarsOutline,
+        CloseOutline,
+        EditOutline,
+        PlusOutline
+    } from "flowbite-svelte-icons";
     import BreakpointTodoItem from "$lib/components/todo/BreakpointTodoItem.svelte";
     import {BreakpointTodo} from "$lib/classes/BreakpointTodo";
     import BonusGaugeTodoItem from "$lib/components/todo/CheckTodoItem.svelte";
@@ -121,7 +127,12 @@
                        { editMode === characterIndex ? 'bg-indigo-200 bg-opacity-40 dark:bg-indigo-200 dark:bg-opacity-20' : '' }"
 >
     <div class="flex w-full items-center justify-between px-1 gap-2">
-        <P class="font-bold text-lg">{ character.name }</P>
+        <div class="flex items-center gap-4">
+            {#if editMode === characterIndex}
+                <BarsOutline class="character-handle focus:outline-none text-orange-400 dark:text-orange-300 cursor-pointer" />
+            {/if}
+            <P class="font-bold text-lg">{ character.name }</P>
+        </div>
         <ClassIcon size="sm" className={ character.className } />
     </div>
     <div class="flex w-full items-center justify-start gap-1 pl-1 mt-2 pb-2">

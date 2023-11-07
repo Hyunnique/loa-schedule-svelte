@@ -76,6 +76,7 @@
 		const sortable = new Sortable(list, {
 			group: "charactersGroup",
 			filter: ".sortable-static",
+			handle: ".character-handle",
 			animation: 150,
 			onMove(e) {
 				return e.related.className.indexOf('sortable-static') === -1;
@@ -154,7 +155,8 @@
 							   editTodoModal = true;
 						   } }
 						   on:removeGroup={ (e) => {
-
+							   characters[characterTarget].todoGroups.splice(e.detail, 1);
+							   characters = characters;
 						   } }
 			/>
 		{/each}
@@ -190,11 +192,11 @@
 			addTodoModal = false;
 		} }
 		on:createAll={ (e) => {
-			characters.forEach(character => {
-				while (character.todoGroups.length <= groupTarget) character.todoGroups.push([]);
-				character.todoGroups[groupTarget].push(structuredClone(e.detail.todo));
-				character.todoGroups = character.todoGroups;
-			});
+			for (let i = 0; i < characters.length; i++) {
+				while (characters[i].todoGroups.length <= groupTarget) characters[i].todoGroups.push([]);
+				characters[i].todoGroups[groupTarget].push(structuredClone(e.detail.todo));
+				characters[i].todoGroups = characters[i].todoGroups;
+			}
 
 			characters = characters;
 			addTodoModal = false;
