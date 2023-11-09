@@ -12,10 +12,9 @@
 
     import type { Todo } from "$lib/classes/Todo";
     import type { Breakpoint } from "$lib/classes/Breakpoint";
-    import type { CheckTodo } from "$lib/classes/CheckTodo";
     import MultiCheckbox from "$lib/components/ui/MultiCheckbox.svelte";
 
-    export let data: CheckTodo;
+    export let data: Todo;
     export let editMode: boolean;
 
     const dispatch = createEventDispatcher();
@@ -23,14 +22,14 @@
 
 <ListgroupItem class="p-0">
     <button class="w-full h-full px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-50 dark:hover:bg-opacity-10 cursor-pointer
-                   { (data.done === data.maxCount || data.currentBonus < data.minBonus) && !editMode ? 'opacity-20 hover:opacity-100' : '' }
+                   { (data.countCurrent === data.countMax || data.bonusCurrent < data.bonusMin) && !editMode ? 'opacity-20 hover:opacity-100' : '' }
                    { data.important ? 'bg-red-100 hover:bg-red-50 dark:bg-opacity-20' : '' }"
             on:click={ () => {
                 if (editMode) {
                     dispatch("edit");
                 } else {
-                    data.done--;
-                    if (data.done < 0) data.done = data.maxCount;
+                    data.countCurrent--;
+                    if (data.countCurrent < 0) data.countCurrent = data.countMax;
                 }
             } }
             on:contextmenu={ (e) => {
@@ -43,13 +42,13 @@
             <div class="order-0 text-left font-bold text-md flex gap-2 items-center">
                 <P class="order-0 text-left font-bold text-md">{ data.name }</P>
                 <div class="flex items-center gap-2">
-                    {#if data.isBonus}
-                        <div>{ data.currentBonus }</div>
+                    {#if data.bonus}
+                        <div>{ data.bonusCurrent }</div>
                     {/if}
                 </div>
             </div>
 
-            <MultiCheckbox bind:current={ data.done } bind:max={ data.maxCount } />
+            <MultiCheckbox bind:current={ data.countCurrent } bind:max={ data.countMax } />
         </div>
         {#if data.memo.length > 0}
             <div class="flex gap-1 items-center mt-2">

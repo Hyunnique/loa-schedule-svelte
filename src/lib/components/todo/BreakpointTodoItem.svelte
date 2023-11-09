@@ -7,9 +7,8 @@
     import type { Breakpoint } from "$lib/classes/Breakpoint";
 
     import BreakpointBar from "$lib/components/ui/BreakpointBar.svelte";
-    import type { BreakpointTodo } from "$lib/classes/BreakpointTodo";
 
-    export let data: BreakpointTodo;
+    export let data: Todo;
     export let editMode: boolean;
 
     const dispatch = createEventDispatcher();

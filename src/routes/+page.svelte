@@ -1,12 +1,15 @@
 <script lang="ts">
+	/*
+	- TODO: Character name 체크해서 Unique key로 만들기
+	- TODO: 숙제 정렬 기능 추가
+
+    */
 	import { onMount } from "svelte";
 	import { get } from "svelte/store";
-	import Sortable, {type SortableEvent} from "sortablejs";
+	import Sortable from "sortablejs";
 
 	import type { Character } from "$lib/classes/Character";
-	import { BreakpointTodo } from "$lib/classes/BreakpointTodo";
-	import type { Todo } from "$lib/classes/Todo";
-	import { CheckTodo } from "$lib/classes/CheckTodo";
+	import { Todo } from "$lib/classes/Todo";
 
 	import { CharacterData } from "../stores/CharacterData";
 	import { OverallData } from "../stores/OverallData";
@@ -18,12 +21,15 @@
 	import EditTodoModal from "$lib/components/ui/EditTodoModal.svelte";
 	import ExclamationConfirmModal from "$lib/components/ui/ExclamationConfirmModal.svelte";
 
-	import { P } from "flowbite-svelte";
-	//import SortableList from "$lib/components/ui/SortableList.svelte";
+	import {Button, P, SpeedDial, SpeedDialButton} from "flowbite-svelte";
+	import {CheckOutline, EditOutline, RotateOutline} from "flowbite-svelte-icons";
 
 	let characters: Character[] = get(CharacterData);
 
-	let characterEl: HTMLElement;
+	let editMode = false;
+	let targetCharacter = -1;
+	let targetGroup = -1;
+	let targetWork = -1;
 
 	let createCharacterModal = false;
 	let removeConfirmModal = false;
@@ -31,17 +37,8 @@
 
 	let addTodoModal = false;
 
-	let characterTarget = 0;
-	let groupTarget = 0;
-	let todoTarget: Todo;
-	let todoTargetIndex = 0;
-
-	let editMode = -1; // TODO: 인덱스 말고 Character name으로 체크하기
-	// TODO: Character name 유니크하게 만들기
-	// TODO: 숙제도 Sortable 구현, 잡고 정렬할 handle 만들기, itemLevel update
-
 	$: CharacterData.set(characters);
-
+	console.log(characters);
 	let earnedGold = 0;
 	let totalGold = 0;
 
@@ -55,8 +52,7 @@
 			for (let todoGroup of character.todoGroups) {
 				for (let todo of todoGroup) {
 					if (todo.type === "Breakpoint") {
-						let sTodo: BreakpointTodo = todo as BreakpointTodo;
-						for (let breakpoint of sTodo.breakpoints) {
+						for (let breakpoint of todo.breakpoints) {
 							if (breakpoint.done) earnedGold += breakpoint.gold;
 							totalGold += breakpoint.gold;
 						}
@@ -94,29 +90,13 @@
 			}
 		})
 	}
-	function handleSortCharacter(e: SortableEvent) {
-
-		const target = characters[e.oldIndex!];
-		characters.splice(e.oldIndex!, 1);
-		characters.splice(e.newIndex!, 0, target);
-
-		characters = characters;
-		console.log(characters);
-	}
 
 	// 모든 숙제에 대해서 checkReset 호출
 	function checkReset() {
 		for (let character of characters) {
 			for (let todoGroup of character.todoGroups) {
 				for (let todo of todoGroup) {
-					if (todo instanceof CheckTodo) {
-						todo.checkReset();
-					}
-					else if (todo instanceof BreakpointTodo) {
-						for (let breakpoint of todo.breakpoints) {
-							breakpoint.checkReset();
-						}
-					}
+					todo.checkReset();
 				}
 			}
 		}
@@ -136,26 +116,21 @@
 	<P class="text-md font-bold p-2 mb-2">총 흭득한 주간 골드 : { earnedGold.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") } / { totalGold.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</P>
 
 	<!-- CharacterItem List -->
-	<div class="character-grid grid gap-4" bind:this={ characterEl } use:initSortable>
+	<div class="character-grid grid gap-4" use:initSortable>
 		{#each characters as _character, i (_character.name)}
 			<CharacterItem bind:character={ _character }
 						   editMode={ editMode }
 						   characterIndex={ i }
-						   on:addTodo={ (e) => { characterTarget = i; groupTarget = e.detail; addTodoModal = true; } }
-						   on:removeItem={ () => { removeConfirmModal = true; characterTarget = i; } }
-						   on:editMode={ () => {
-							   if (editMode === i) editMode = -1;
-							   else editMode = i;
-						   } }
+						   on:addTodoModal={ (e) => { targetCharacter = i; targetGroup = e.detail; addTodoModal = true; } }
+						   on:removeCharacterModal={ () => { targetCharacter = i; removeConfirmModal = true; } }
 						   on:edit={ (e) => {
-							   characterTarget = i;
-							   groupTarget = e.detail.groupTarget;
-							   todoTargetIndex = e.detail.todoTargetIndex;
-							   todoTarget = structuredClone(e.detail.todoTarget);
+							   targetCharacter = i;
+							   targetGroup = e.detail.groupTarget;
+							   targetWork = e.detail.todoTargetIndex;
 							   editTodoModal = true;
 						   } }
 						   on:removeGroup={ (e) => {
-							   characters[characterTarget].todoGroups.splice(e.detail, 1);
+							   characters[targetCharacter].todoGroups.splice(e.detail, 1);
 							   characters = characters;
 						   } }
 			/>
@@ -165,11 +140,27 @@
 	</div>
 </section>
 
+{#if editMode}
+	<Button color="green" class="fixed right-6 bottom-6 rounded-full w-14 h-14 bg-green-500 dark:bg-green-500"
+			on:click={ () => { editMode = false; } }
+	>
+		<CheckOutline />
+	</Button>
+{:else}
+	<SpeedDial size="lg" color="purpleToPink" gradient tooltip="none" textOutside class="opacity-100">
+		<SpeedDialButton name="편집" on:click={ () => { editMode = !editMode; } }>
+			<EditOutline />
+		</SpeedDialButton>
+		<SpeedDialButton name="갱신">
+			<RotateOutline />
+		</SpeedDialButton>
+	</SpeedDial>
+{/if}
 <!-- 캐릭터 삭제 확인 Modal -->
 <ExclamationConfirmModal
 		bind:open={ removeConfirmModal }
 		on:confirm={ () => {
-				characters.splice(characterTarget, 1);
+				characters.splice(targetCharacter, 1);
 				characters = characters;
 				removeConfirmModal = false;
 			} }
@@ -183,18 +174,18 @@
 <AddTodoModal
 		bind:open={ addTodoModal }
 		on:addGroup={ () => {
-			characters[characterTarget].todoGroups.push([]);
+			characters[targetCharacter].todoGroups.push([]);
 			characters = characters;
 		} }
 		on:create={ (e) => {
-			characters[characterTarget].todoGroups[groupTarget].push(e.detail.todo);
+			characters[targetCharacter].todoGroups[targetGroup].push(e.detail.todo);
 			characters = characters;
 			addTodoModal = false;
 		} }
 		on:createAll={ (e) => {
 			for (let i = 0; i < characters.length; i++) {
-				while (characters[i].todoGroups.length <= groupTarget) characters[i].todoGroups.push([]);
-				characters[i].todoGroups[groupTarget].push(structuredClone(e.detail.todo));
+				while (characters[i].todoGroups.length <= targetGroup) characters[i].todoGroups.push([]);
+				characters[i].todoGroups[targetGroup].push(structuredClone(e.detail.todo));
 				characters[i].todoGroups = characters[i].todoGroups;
 			}
 
@@ -206,28 +197,17 @@
 <!-- 숙제 수정 Modal -->
 <EditTodoModal
 		bind:open={ editTodoModal }
-		target={ todoTarget }
+		targetCharacter={ targetCharacter }
+		targetGroup={ targetGroup }
+		targetWork={ targetWork }
 		on:confirm={ (data) => {
-			let target = characters[characterTarget].todoGroups[groupTarget][todoTargetIndex];
-
-			target.name = data.detail.name;
-			target.memo = data.detail.memo;
-			target.important = data.detail.important;
-
-			if (target instanceof CheckTodo) {
-				target.isBonus = data.detail.isBonus;
-				target.currentBonus = parseInt(data.detail.currentBonus);
-				target.maxCount = parseInt(data.detail.maxCount);
-				target.resetPeriod = parseInt(data.detail.resetPeriod);
-				target.minBonus = parseInt(data.detail.minBonus);
-			}
-
+			characters[targetCharacter].todoGroups[targetGroup][targetWork] = new Todo(data.detail);
 			characters = characters;
 
 			editTodoModal = false;
 		} }
 		on:remove={ () => {
-			characters[characterTarget].todoGroups[groupTarget].splice(todoTargetIndex , 1);
+			characters[targetCharacter].todoGroups[targetGroup].splice(targetWork , 1);
 			characters = characters;
 		} }
 />

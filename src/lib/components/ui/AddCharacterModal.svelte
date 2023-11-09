@@ -2,12 +2,10 @@
     import {Button, Checkbox, Input, Modal} from "flowbite-svelte";
     import type {CharacterAPIResult} from "$lib/interfaces/CharacterAPIResult";
     import WeeklyTemplates from "$lib/templates/WeeklyTemplates";
-    import type {Todo} from "$lib/classes/Todo";
+    import {Todo} from "$lib/classes/Todo";
     import {Breakpoint} from "$lib/classes/Breakpoint";
-    import {BreakpointTodo} from "$lib/classes/BreakpointTodo";
     import DailyTemplates from "$lib/templates/DailyTemplates";
     import {Character} from "$lib/classes/Character";
-    import {CheckTodo} from "$lib/classes/CheckTodo";
 
     export let open: boolean = false;
     export let characters: Character[];
@@ -125,7 +123,8 @@
                         }
                     }
 
-                    recommendedTemplates.push(new BreakpointTodo({
+                    recommendedTemplates.push(new Todo({
+                        type: 'Breakpoint',
                         name: template.name,
                         id: template.id,
                         breakpoints: templateBuilder
@@ -136,27 +135,29 @@
 
                 for (let template of DailyTemplates) {
                     if (template.type == 'Bonus') {
-                        dailys.push(new CheckTodo({
+                        dailys.push(new Todo({
+                            type: 'Check',
                             name: template.name,
                             id: template.id,
-                            isBonus: true,
-                            maxCount: template.maxCount,
+                            bonus: true,
+                            countMax: template.maxCount,
                             resetPeriod: 1
                         }));
                     } else if (template.type == 'Check') {
-                        dailys.push(new CheckTodo({
+                        dailys.push(new Todo({
+                            type: 'Check',
                             name: template.name,
                             id: template.id,
-                            isBonus: false,
-                            maxCount: 1,
+                            bonus: false,
+                            countMax: 1,
                             resetPeriod: 1
                         }));
                     }
                 }
 
                 let characterObj: Character = new Character({
-                    id: characterIdIndex++,
                     name: character.CharacterName,
+                    id: characterIdIndex++,
                     itemLevel: itemLevel,
                     className: character.CharacterClassName,
                     serverName: character.ServerName

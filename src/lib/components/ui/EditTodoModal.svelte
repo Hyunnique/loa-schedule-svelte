@@ -2,63 +2,45 @@
     import {Button, Checkbox, FloatingLabelInput, Input, Modal, Select, Span} from "flowbite-svelte";
     import DailyTemplates from "$lib/templates/DailyTemplates";
     import WeeklyTemplates from "$lib/templates/WeeklyTemplates";
-    import {Todo} from "$lib/classes/Todo";
+    import type {Todo} from "$lib/classes/Todo";
     import {createEventDispatcher} from "svelte";
-    import type {CheckTodo} from "$lib/classes/CheckTodo";
     import type {Character} from "$lib/classes/Character";
     import ExclamationConfirmModal from "$lib/components/ui/ExclamationConfirmModal.svelte";
-    import type {BreakpointTodo} from "$lib/classes/BreakpointTodo";
+    import {get} from "svelte/store";
+    import { CharacterData } from "../../../stores/CharacterData";
     export let open: boolean;
     let removeConfirmModal = false;
-    export let target: Todo = new Todo({ name: "", type: "Check", id: "" });
+    export let targetCharacter: number;
+    export let targetGroup: number;
+    export let targetWork: number;
+
+    let characters: Character[] = get(CharacterData);
+    $: CharacterData.set(characters);
 
     interface FormData {
         name: string;
         type: string;
         important: boolean;
         memo: string;
-        isBonus: boolean;
-        currentBonus: number;
-        maxCount: number;
+        bonus: boolean;
+        bonusCurrent: number;
+        bonusMin: number;
+        countMax: number;
         resetPeriod: number;
-        minBonus: number;
     }
 
     const dispatch = createEventDispatcher();
 
-    $: initForm(target);
+    $: initForm(targetCharacter, targetGroup, targetWork);
 
     let formData: FormData;
 
-    function initForm(target: Todo) {
-        if (target.type == "Breakpoint") {
-            let nTarget = target as BreakpointTodo;
-            formData = {
-                name: nTarget.name,
-                type: nTarget.type,
-                important: nTarget.important,
-                memo: nTarget.memo,
-                isBonus: false,
-                currentBonus: 0,
-                maxCount: 0,
-                resetPeriod: 0,
-                minBonus: 0
-            }
-        } else {
-            let nTarget = target as CheckTodo;
+    function initForm(targetCharacter: number, targetGroup: number, targetWork: number) {
+        if (targetCharacter == -1 || targetGroup == -1 || targetWork == -1) return;
 
-            formData = {
-                name: nTarget.name,
-                type: nTarget.type,
-                important: nTarget.important,
-                memo: nTarget.memo,
-                isBonus: nTarget.isBonus,
-                currentBonus: nTarget.currentBonus,
-                maxCount: nTarget.maxCount,
-                resetPeriod: nTarget.resetPeriod,
-                minBonus: nTarget.minBonus
-            }
-        }
+        const target = characters[targetCharacter].todoGroups[targetGroup][targetWork];
+
+        formData = { ...target };
     }
 </script>
 
@@ -77,13 +59,13 @@
         </div>
         <Checkbox bind:checked={ formData.important }>중요</Checkbox>
         <FloatingLabelInput type="text" style="outlined" bind:value={ formData.memo } label="메모" />
-        <FloatingLabelInput type="number" min="0" style="outlined" bind:value={ formData.maxCount } label="최대 완료 횟수" />
+        <FloatingLabelInput type="number" min="0" style="outlined" bind:value={ formData.countMax } label="최대 완료 횟수" />
         <FloatingLabelInput type="number" min="0" style="outlined" bind:value={ formData.resetPeriod } label="초기화 주기 (일)" />
-        <Checkbox bind:checked={ formData.isBonus }>휴식 게이지 사용</Checkbox>
+        <Checkbox bind:checked={ formData.bonus }>휴식 게이지 사용</Checkbox>
 
-        {#if formData.isBonus}
-            <FloatingLabelInput type="number" min="0" max="100" style="outlined" bind:value={ formData.currentBonus } label="휴식 게이지" />
-            <FloatingLabelInput type="number" min="0" max="100" style="outlined" bind:value={ formData.minBonus } label="비활성화 기준 (휴식 게이지)" />
+        {#if formData.bonus}
+            <FloatingLabelInput type="number" min="0" max="100" style="outlined" bind:value={ formData.bonusCurrent } label="휴식 게이지" />
+            <FloatingLabelInput type="number" min="0" max="100" style="outlined" bind:value={ formData.bonusMin } label="비활성화 기준 (휴식 게이지)" />
         {/if}
 
         <div class="flex flex-row-reverse gap-2">

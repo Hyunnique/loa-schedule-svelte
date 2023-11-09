@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Card } from "flowbite-svelte";
-    import {UserAddOutline} from "flowbite-svelte-icons";
+    import { UserAddOutline } from "flowbite-svelte-icons";
 
     export let modal: boolean;
 </script>

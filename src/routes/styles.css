@@ -25,3 +25,7 @@ body {
 	-moz-user-select: none;
 	-ms-user-select: none;
 }
+
+svg:focus {
+	outline: none;
+}

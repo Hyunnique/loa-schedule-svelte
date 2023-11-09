@@ -1,32 +1,42 @@
-import type { Todo } from '$lib/classes/Todo';
+import {Todo} from "$lib/classes/Todo";
 
-interface Params {
-	id: number;
+interface ICharacter {
 	name: string;
-	itemLevel: number;
-	className: string;
-	serverName: string;
+
+	id?: number;
+	itemLevel?: number;
+	className?: string;
+	serverName?: string;
+	todoGroups?: Todo[][];
 }
 
 export class Character {
-	version: string;
+	name: string;
 
 	id: number;
-	name: string;
 	itemLevel: number;
 	className: string;
 	serverName: string;
 	todoGroups: Todo[][];
 
-	constructor({ id, name, itemLevel, className, serverName }: Params) {
-		this.version = '1.0';
-
-		this.id = id;
-		this.name = name;
-		this.itemLevel = itemLevel;
-		this.className = className;
-		this.serverName = serverName;
+	constructor(params?: ICharacter) {
+		this.id = params?.id ?? 0;
+		this.name = params?.name ?? "";
+		this.itemLevel = params?.itemLevel ?? 0;
+		this.className = params?.className ?? "";
+		this.serverName = params?.serverName ?? "";
 
 		this.todoGroups = [];
+
+		if (params?.todoGroups != null) {
+			for (const todoGroup of params.todoGroups) {
+				this.todoGroups.push([]);
+				for (const todo of todoGroup) {
+					this.todoGroups[this.todoGroups.length - 1].push(
+						new Todo(todo)
+					);
+				}
+			}
+		}
 	}
 }

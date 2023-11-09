@@ -3,9 +3,8 @@
     import DailyTemplates from "$lib/templates/DailyTemplates";
     import WeeklyTemplates from "$lib/templates/WeeklyTemplates";
     import {createEventDispatcher, onMount} from "svelte";
-    import {CheckTodo} from "$lib/classes/CheckTodo";
-    import {BreakpointTodo} from "$lib/classes/BreakpointTodo";
     import {Breakpoint} from "$lib/classes/Breakpoint";
+    import {Todo} from "$lib/classes/Todo";
 
     export let open: boolean;
 
@@ -128,11 +127,12 @@ items.push(WeeklyTemplates.map(e => {
                     if (type === "Check") {
                         dispatcher("create", {
                             targetGroup: group,
-                            todo: new CheckTodo({
+                            todo: new Todo({
+                                type: 'Check',
                                 name: name,
                                 id: id,
-                                isBonus: false,
-                                maxCount: 1,
+                                bonus: false,
+                                countMax: 1,
                                 resetPeriod: resetPeriod
                             })
                         });
@@ -140,7 +140,8 @@ items.push(WeeklyTemplates.map(e => {
                     else if (type === "Breakpoint") {
                         dispatcher("create", {
                             targetGroup: group,
-                            todo: new BreakpointTodo({
+                            todo: new Todo({
+                                type: 'Breakpoint',
                                 name: name,
                                 id: id,
                                 breakpoints: targetBreakpoints
@@ -152,11 +153,12 @@ items.push(WeeklyTemplates.map(e => {
                     if (type === "Check") {
                         dispatcher("createAll", {
                             targetGroup: group,
-                            todo: new CheckTodo({
+                            todo: new Todo({
+                                type: 'Check',
                                 name: name,
                                 id: id,
-                                isBonus: false,
-                                maxCount: 1,
+                                bonus: false,
+                                countMax: 1,
                                 resetPeriod: resetPeriod
                             })
                         });
@@ -164,7 +166,8 @@ items.push(WeeklyTemplates.map(e => {
                     else if (type === "Breakpoint") {
                         dispatcher("createAll", {
                             targetGroup: group,
-                            todo: new BreakpointTodo({
+                            todo: new Todo({
+                                type: 'Breakpoint',
                                 name: name,
                                 id: id,
                                 breakpoints: targetBreakpoints

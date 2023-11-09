@@ -10,21 +10,19 @@
         PlusOutline
     } from "flowbite-svelte-icons";
     import BreakpointTodoItem from "$lib/components/todo/BreakpointTodoItem.svelte";
-    import {BreakpointTodo} from "$lib/classes/BreakpointTodo";
-    import BonusGaugeTodoItem from "$lib/components/todo/CheckTodoItem.svelte";
 
     import ClassIcon from "$lib/components/ui/ClassIcon.svelte";
-    import {CheckTodo} from "$lib/classes/CheckTodo";
     import CheckTodoItem from "$lib/components/todo/CheckTodoItem.svelte";
     import {createEventDispatcher} from "svelte";
     import AddTodoItem from "$lib/components/ui/AddTodoItem.svelte";
     import RemoveGroupItem from "$lib/components/ui/RemoveGroupItem.svelte";
     import Sortable from "sortablejs";
+    import {Todo} from "$lib/classes/Todo";
 
     export let character: Character;
     const dispatch = createEventDispatcher();
 
-    export let editMode: number;
+    export let editMode: boolean;
     export let characterIndex: number;
 
     let serverColor: 'primary' | 'blue' | 'dark' | 'red' | 'green' | 'yellow' | 'indigo' | 'purple' | 'pink' | 'none' | undefined;
@@ -123,13 +121,12 @@
 </script>
 
 <Card size="md" data-id={ character.id } class="relative flex-col inline-block w-1/7 h-full !p-4 overflow-auto space-y-2
-                       { editMode === -1 || editMode === characterIndex ? '' : 'opacity-60' }
-                       { editMode === characterIndex ? 'bg-indigo-200 bg-opacity-40 dark:bg-indigo-200 dark:bg-opacity-20' : '' }"
+                       { editMode ? 'bg-indigo-200 bg-opacity-40 dark:bg-indigo-200 dark:bg-opacity-20' : '' }"
 >
     <div class="flex w-full items-center justify-between px-1 gap-2">
         <div class="flex items-center gap-4">
-            {#if editMode === characterIndex}
-                <BarsOutline class="character-handle focus:outline-none text-orange-400 dark:text-orange-300 cursor-pointer" />
+            {#if editMode}
+                <BarsOutline class="character-handle text-orange-400 dark:text-orange-300 cursor-pointer" />
             {/if}
             <P class="font-bold text-lg">{ character.name }</P>
         </div>
@@ -143,12 +140,12 @@
 
     <div class="flex flex-col gap-2">
         {#each character.todoGroups as todo, groupIndex}
-            {#if todo.length > 0 || editMode === characterIndex}
+            {#if todo.length > 0 || editMode}
                 <Listgroup class="border-2 dark:!bg-transparent">
                     {#each todo as work, i}
-                        {#if work instanceof BreakpointTodo}
+                        {#if work instanceof Todo}
                             <BreakpointTodoItem
-                                    editMode={ editMode === characterIndex }
+                                    editMode={ editMode }
                                     bind:data={ work }
                                     on:destroy={ () => { todo.splice(i, 1); character = character; } }
                                     on:edit={ () => {
@@ -159,9 +156,9 @@
                                         });
                                     } }
                             />
-                        {:else if work instanceof CheckTodo}
+                        {:else if work instanceof Todo}
                             <CheckTodoItem
-                                    editMode={ editMode === characterIndex }
+                                    editMode={ editMode }
                                     bind:data={ work }
                                     on:destroy={ () => { todo.splice(i, 1); character = character; } }
                                     on:edit={ () => {
@@ -174,8 +171,8 @@
                             />
                         {/if}
                     {/each}
-                    {#if editMode === characterIndex}
-                        <AddTodoItem on:click={ () => { dispatch("addTodo", groupIndex); } } />
+                    {#if editMode}
+                        <AddTodoItem on:click={ () => { dispatch("addTodoModal", groupIndex); } } />
                         {#if todo.length === 0}
                             <RemoveGroupItem on:click={ () => { dispatch("removeGroup", groupIndex); } } />
                         {/if}
@@ -186,15 +183,9 @@
     </div>
 
     <div class="w-full flex flex-row-reverse justify-between">
-
-        <div>
-            <Button color="light" class="p-3 w-14 h-6" on:click={ () => { dispatch("editMode"); } }><EditOutline class="w-4 h-4 focus:outline-0" /></Button>
-            <Tooltip>숙제 편집</Tooltip>
-        </div>
-
-        {#if editMode === characterIndex}
+        {#if editMode}
             <div>
-                <Button color="red" class="p-3 w-14 h-6" on:click={ () => { dispatch("removeItem"); } }><CloseOutline class="w-3 h-3 focus:outline-0" /></Button>
+                <Button color="red" class="p-3 w-14 h-6" on:click={ () => { dispatch("removeCharacterModal"); } }><CloseOutline class="w-3 h-3 focus:outline-0" /></Button>
                 <Tooltip>캐릭터 삭제</Tooltip>
             </div>
         {/if}
