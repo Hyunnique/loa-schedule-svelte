@@ -133,27 +133,10 @@
 
                 let dailys: Todo[] = [];
 
-                for (let template of DailyTemplates) {
-                    if (template.type == 'Bonus') {
-                        dailys.push(new Todo({
-                            type: 'Check',
-                            name: template.name,
-                            id: template.id,
-                            bonus: true,
-                            countMax: template.maxCount,
-                            resetPeriod: 1
-                        }));
-                    } else if (template.type == 'Check') {
-                        dailys.push(new Todo({
-                            type: 'Check',
-                            name: template.name,
-                            id: template.id,
-                            bonus: false,
-                            countMax: 1,
-                            resetPeriod: 1
-                        }));
-                    }
-                }
+                dailys.push(new Todo(DailyTemplates.find(x => x.name == "카오스 던전")!));
+                dailys.push(new Todo(DailyTemplates.find(x => x.name == "에포나 의뢰")!));
+                dailys.push(new Todo(DailyTemplates.find(x => x.name == "가디언 토벌")!));
+                dailys.push(new Todo(DailyTemplates.find(x => x.name == "길드 출석")!));
 
                 let characterObj: Character = new Character({
                     id: character.CharacterName,
