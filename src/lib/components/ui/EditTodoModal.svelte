@@ -8,6 +8,7 @@
     import ExclamationConfirmModal from "$lib/components/ui/ExclamationConfirmModal.svelte";
     import {get} from "svelte/store";
     import { CharacterData } from "../../../stores/CharacterData";
+    import type {EnableConditions} from "$lib/classes/EnableConditions";
     export let open: boolean;
     let removeConfirmModal = false;
     export let targetCharacter: number;
@@ -24,9 +25,12 @@
         memo: string;
         bonus: boolean;
         bonusCurrent: number;
-        bonusMin: number;
         countMax: number;
         resetPeriod: number;
+        enableConditions: { // TODO: EnableConditions는 저장하지 않아도 reactive로 값이 변경되는 문제 해결하기
+            bonusMin: number;
+            dayType: number[];
+        }
     }
 
     const dispatch = createEventDispatcher();
@@ -59,13 +63,16 @@
         </div>
         <Checkbox bind:checked={ formData.important }>중요</Checkbox>
         <FloatingLabelInput type="text" style="outlined" bind:value={ formData.memo } label="메모" />
-        <FloatingLabelInput type="number" min="0" style="outlined" bind:value={ formData.countMax } label="최대 완료 횟수" />
-        <FloatingLabelInput type="number" min="0" style="outlined" bind:value={ formData.resetPeriod } label="초기화 주기 (일)" />
-        <Checkbox bind:checked={ formData.bonus }>휴식 게이지 사용</Checkbox>
+
+        {#if formData.type === 'Check'}
+            <FloatingLabelInput type="number" min="0" style="outlined" bind:value={ formData.countMax } label="최대 완료 횟수" />
+            <FloatingLabelInput type="number" min="0" style="outlined" bind:value={ formData.resetPeriod } label="초기화 주기 (일)" />
+            <Checkbox bind:checked={ formData.bonus }>휴식 게이지 사용</Checkbox>
+        {/if}
 
         {#if formData.bonus}
             <FloatingLabelInput type="number" min="0" max="100" style="outlined" bind:value={ formData.bonusCurrent } label="휴식 게이지" />
-            <FloatingLabelInput type="number" min="0" max="100" style="outlined" bind:value={ formData.bonusMin } label="비활성화 기준 (휴식 게이지)" />
+            <FloatingLabelInput type="number" min="0" max="100" style="outlined" bind:value={ formData.enableConditions.bonusMin } label="비활성화 기준 (휴식 게이지)" />
         {/if}
 
         <div class="flex flex-row-reverse gap-2">

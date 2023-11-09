@@ -128,7 +128,7 @@
             {#if editMode}
                 <BarsOutline class="character-handle text-orange-400 dark:text-orange-300 cursor-pointer" />
             {/if}
-            <P class="font-bold text-lg">{ character.id }</P>
+            <P class="font-bold text-lg tracking-tighter">{ character.id }</P>
         </div>
         <ClassIcon size="sm" className={ character.className } />
     </div>

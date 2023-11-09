@@ -22,7 +22,7 @@
 	import ExclamationConfirmModal from "$lib/components/ui/ExclamationConfirmModal.svelte";
 
 	import {Button, P, SpeedDial, SpeedDialButton} from "flowbite-svelte";
-	import {CheckOutline, EditOutline, RotateOutline} from "flowbite-svelte-icons";
+	import {CheckOutline, EditOutline, PlusOutline, QuestionCircleOutline, RotateOutline} from "flowbite-svelte-icons";
 
 	let characters: Character[] = get(CharacterData);
 
@@ -79,7 +79,6 @@
 			},
 			onSort() {
 				const order = sortable.toArray();
-				order.splice(order.length - 1, 1);
 
 				const allItems = characters.flat();
 				characters = order.map(id => {
@@ -136,7 +135,7 @@
 			/>
 		{/each}
 
-		<AddCharacterItem bind:modal={ createCharacterModal } />
+		<!-- <AddCharacterItem bind:modal={ createCharacterModal } /> -->
 	</div>
 </section>
 
@@ -148,11 +147,19 @@
 	</Button>
 {:else}
 	<SpeedDial size="lg" color="purpleToPink" gradient tooltip="none" textOutside class="opacity-100">
+		<SpeedDialButton name="추가" on:click={ () => { createCharacterModal = true; } }>
+			<PlusOutline />
+		</SpeedDialButton>
 		<SpeedDialButton name="편집" on:click={ () => { editMode = !editMode; } }>
 			<EditOutline />
 		</SpeedDialButton>
 		<SpeedDialButton name="갱신">
 			<RotateOutline />
+		</SpeedDialButton>
+		<SpeedDialButton name="도움말" on:click={ () => {
+			alert(`임시 도움말 : \n 숙제 우클릭 = 숙제 정보 수정\n 우측 하단 다이얼 -> 편집 버튼으로 편집 모드 전환\n 편집 모드에서 그룹 추가, 숙제 추가, 캐릭터 순서 변경 가능`);
+		} }>
+			<QuestionCircleOutline />
 		</SpeedDialButton>
 	</SpeedDial>
 {/if}

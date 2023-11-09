@@ -1,4 +1,5 @@
-import {Breakpoint} from "$lib/classes/Breakpoint";
+import { Breakpoint } from "$lib/classes/Breakpoint";
+import { EnableConditions } from "$lib/classes/EnableConditions";
 
 interface ITodo {
     type: "Check" | "Breakpoint";
@@ -18,6 +19,8 @@ interface ITodo {
     resetPeriod?: number;
     resetNext?: number;
 
+    enableConditions?: EnableConditions;
+
     breakpoints?: Breakpoint[];
 }
 
@@ -30,7 +33,6 @@ export class Todo {
     important: boolean;
 
     bonus: boolean;
-    bonusMin: number;
     bonusCurrent: number;
 
     countCurrent: number;
@@ -38,6 +40,8 @@ export class Todo {
 
     resetPeriod: number;
     resetNext: number;
+
+    enableConditions: EnableConditions;
 
     breakpoints: Breakpoint[];
 
@@ -49,11 +53,16 @@ export class Todo {
         this.important = params?.important ?? false;
 
         this.bonus = params?.bonus ?? false;
-        this.bonusMin = params?.bonusMin ?? 0;
         this.bonusCurrent = params?.bonusCurrent ?? 0;
 
         this.countCurrent = params?.countCurrent ?? 0;
         this.countMax = params?.countMax ?? 1;
+
+        if (params?.enableConditions != null) {
+            this.enableConditions = new EnableConditions(params.enableConditions);
+        } else {
+            this.enableConditions = new EnableConditions();
+        }
 
         this.breakpoints = [];
 

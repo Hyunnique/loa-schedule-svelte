@@ -1,26 +1,44 @@
 export default [
 	{
 		name: '카오스 던전',
-		id: 'chaosdungeon',
-		type: 'Bonus',
-		maxCount: 2
+		id: 'dungeon.chaos',
+		type: 'Check',
+		bonus: true,
+		countMax: 2,
+		resetPeriod: 1
 	},
 	{
 		name: '에포나 의뢰',
-		id: 'epona',
-		type: 'Bonus',
-		maxCount: 3
+		id: 'quest.epona',
+		type: 'Check',
+		bonus: true,
+		countMax: 3,
+		resetPeriod: 1
 	},
 	{
 		name: '가디언 토벌',
-		id: 'guardian',
-		type: 'Bonus',
-		maxCount: 1
+		id: 'raid.guardian',
+		type: 'Check',
+		bonus: true,
+		countMax: 1,
+		resetPeriod: 1
 	},
 	{
 		name: '길드 출석',
-		id: 'guilddaily',
+		id: 'guild.daily',
 		type: 'Check',
-		maxCount: 1
+		bonus: false,
+		countMax: 1,
+		resetPeriod: 1
+	},
+	{
+		name: '카오스 게이트',
+		id: 'chaos.gate',
+		type: 'Check',
+		countMax: 1,
+		resetPeriod: 1,
+		enableConditions: {
+
+		}
 	}
 ];
