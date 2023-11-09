@@ -77,13 +77,13 @@
 			onMove(e) {
 				return e.related.className.indexOf('sortable-static') === -1;
 			},
-			onSort(e) {
+			onSort() {
 				const order = sortable.toArray();
 				order.splice(order.length - 1, 1);
 
 				const allItems = characters.flat();
 				characters = order.map(id => {
-					return allItems.find(item => item.id == parseInt(id))!
+					return allItems.find(item => item.id == id)!
 				});
 
 				console.log(characters);
@@ -117,7 +117,7 @@
 
 	<!-- CharacterItem List -->
 	<div class="character-grid grid gap-4" use:initSortable>
-		{#each characters as _character, i (_character.name)}
+		{#each characters as _character, i (_character.id)}
 			<CharacterItem bind:character={ _character }
 						   editMode={ editMode }
 						   characterIndex={ i }

@@ -6,9 +6,9 @@
 
 <div class="flex justify-between gap-1 w-full h-5 mb-1 mt-1">
     {#each breakpoints as breakpoint, i}
-        <button class="w-full h-full rounded-sm border-2 { breakpoint.borderColor } { breakpoint.borderColorDark }
-                    { breakpoint.done ? breakpoint.bgColor : 'bg-white' }
-                    { breakpoint.done ? breakpoint.bgColorDark : 'dark:bg-gray-600' }"
+        <button class="w-full h-full rounded-sm border-2 { breakpoint.borderColor() } { breakpoint.borderColorDark() }
+                    { breakpoint.done ? breakpoint.bgColor() : 'bg-white' }
+                    { breakpoint.done ? breakpoint.bgColorDark() : 'dark:bg-gray-600' }"
                 on:click={ (e) => {
                     e.stopPropagation();
 

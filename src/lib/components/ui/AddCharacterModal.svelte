@@ -156,8 +156,7 @@
                 }
 
                 let characterObj: Character = new Character({
-                    name: character.CharacterName,
-                    id: characterIdIndex++,
+                    id: character.CharacterName,
                     itemLevel: itemLevel,
                     className: character.CharacterClassName,
                     serverName: character.ServerName
@@ -184,7 +183,7 @@
             {#each searchResults as searchResult, i}
                 <Checkbox custom bind:checked={ searchChecked[i] }>
                     <div class="font-normal p-2 w-full text-gray-500 bg-white rounded-lg border-2 border-gray-200 cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-primary-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
-                        <div class="w-full text-lg font-semibold">{ searchResult.name }</div>
+                        <div class="w-full text-lg font-semibold">{ searchResult.id }</div>
                         <div class="w-full text-sm">{ searchResult.serverName + ' | ' + searchResult.className + ' | ' + searchResult.itemLevel }</div>
                     </div>
                 </Checkbox>

@@ -128,7 +128,7 @@
             {#if editMode}
                 <BarsOutline class="character-handle text-orange-400 dark:text-orange-300 cursor-pointer" />
             {/if}
-            <P class="font-bold text-lg">{ character.name }</P>
+            <P class="font-bold text-lg">{ character.id }</P>
         </div>
         <ClassIcon size="sm" className={ character.className } />
     </div>
@@ -143,7 +143,7 @@
             {#if todo.length > 0 || editMode}
                 <Listgroup class="border-2 dark:!bg-transparent">
                     {#each todo as work, i}
-                        {#if work instanceof Todo}
+                        {#if work.type === 'Breakpoint'}
                             <BreakpointTodoItem
                                     editMode={ editMode }
                                     bind:data={ work }
@@ -156,7 +156,7 @@
                                         });
                                     } }
                             />
-                        {:else if work instanceof Todo}
+                        {:else if work.type === 'Check'}
                             <CheckTodoItem
                                     editMode={ editMode }
                                     bind:data={ work }
