@@ -10,11 +10,14 @@
     export let editMode: boolean;
 
     const dispatch = createEventDispatcher();
+
+    $: disabled = data.countCurrent === data.countMax ||
+                  !data.enableConditions.checkEnabled(data.bonusCurrent);
 </script>
 
 <ListgroupItem class="p-0">
     <button class="w-full h-full px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-50 dark:hover:bg-opacity-10 cursor-pointer
-                   { (data.countCurrent === data.countMax || data.bonusCurrent < data.enableConditions.bonusMin) && !editMode ? 'opacity-20 hover:opacity-100' : '' }
+                   { disabled && !editMode ? 'opacity-20 hover:opacity-100' : '' }
                    { data.important ? 'bg-red-100 hover:bg-red-50 dark:bg-opacity-20' : '' }"
             on:click={ () => {
                 if (editMode) {

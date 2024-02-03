@@ -1,5 +1,43 @@
 export default [
 	{
+		name: '에키드나 하드',
+		id: 'echidna.hard',
+		type: 'Breakpoint',
+		breakpoints: [
+			{
+				itemLevelMin: 1630,
+				itemLevelComfort: 1635,
+				gold: 6000,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1630,
+				itemLevelComfort: 1635,
+				gold: 12500,
+				resetPeriod: 7
+			}
+		]
+	},
+	{
+		name: '에키드나 노말',
+		id: 'echidna.normal',
+		type: 'Breakpoint',
+		breakpoints: [
+			{
+				itemLevelMin: 1620,
+				itemLevelComfort: 1625,
+				gold: 5000,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1620,
+				itemLevelComfort: 1625,
+				gold: 9500,
+				resetPeriod: 7
+			}
+		]
+	},
+	{
 		name: '카멘 하드',
 		id: 'kamen.hard',
 		type: 'Breakpoint',
