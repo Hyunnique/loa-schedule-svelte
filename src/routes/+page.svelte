@@ -23,6 +23,7 @@
 
 	import {Button, P, SpeedDial, SpeedDialButton} from "flowbite-svelte";
 	import {CheckOutline, EditOutline, PlusOutline, QuestionCircleOutline, RotateOutline} from "flowbite-svelte-icons";
+	import {EnableConditions} from "$lib/classes/EnableConditions";
 
 	let characters: Character[] = get(CharacterData);
 
@@ -208,7 +209,16 @@
 		targetGroup={ targetGroup }
 		targetWork={ targetWork }
 		on:confirm={ (data) => {
-			characters[targetCharacter].todoGroups[targetGroup][targetWork] = new Todo(data.detail);
+			characters[targetCharacter].todoGroups[targetGroup][targetWork] = new Todo({
+				...(data.detail),
+				bonusCurrent: parseInt(data.detail.bonusCurrent),
+				countMax: parseInt(data.detail.countMax),
+				resetPeriod: parseInt(data.detail.resetPeriod),
+				enableConditions: new EnableConditions({
+					bonusMin: parseInt(data.detail.enableConditions.bonusMin),
+					dayType: data.detail.dayType
+				})
+			});
 			characters = characters;
 
 			editTodoModal = false;

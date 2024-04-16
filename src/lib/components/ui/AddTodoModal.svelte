@@ -45,8 +45,8 @@ let name: string = "";
 let id: string = "";
 let group: number;
 let type: string;
-let maxCount: number;
-let resetPeriod: number;
+let maxCount: string;
+let resetPeriod: string;
 
 let targetBreakpoints: Breakpoint[];
 
@@ -132,8 +132,8 @@ items.push(WeeklyTemplates.map(e => {
                                 name: name,
                                 id: id,
                                 bonus: false,
-                                countMax: 1,
-                                resetPeriod: resetPeriod
+                                countMax: parseInt(maxCount),
+                                resetPeriod: parseInt(resetPeriod)
                             })
                         });
                     }
@@ -158,8 +158,8 @@ items.push(WeeklyTemplates.map(e => {
                                 name: name,
                                 id: id,
                                 bonus: false,
-                                countMax: 1,
-                                resetPeriod: resetPeriod
+                                countMax: parseInt(maxCount),
+                                resetPeriod: parseInt(resetPeriod)
                             })
                         });
                     }
