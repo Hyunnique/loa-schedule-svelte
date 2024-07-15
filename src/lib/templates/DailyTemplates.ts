@@ -20,6 +20,14 @@ const templates: Template[] = [
 		resetPeriod: 1
 	},
 	{
+		name: '쿠르잔 전선',
+		id: 'dungeon.chaosnew',
+		type: 'Check',
+		bonus: true,
+		countMax: 1,
+		resetPeriod: 1
+	},
+	{
 		name: '에포나 의뢰',
 		id: 'quest.epona',
 		type: "Check",

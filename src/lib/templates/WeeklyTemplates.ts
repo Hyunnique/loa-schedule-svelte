@@ -120,13 +120,7 @@ export default [
 			{
 				itemLevelMin: 1620,
 				itemLevelComfort: 1630,
-				gold: 2000,
-				resetPeriod: 7
-			},
-			{
-				itemLevelMin: 1620,
-				itemLevelComfort: 1630,
-				gold: 2500,
+				gold: 3000,
 				resetPeriod: 7
 			},
 			{
@@ -157,19 +151,38 @@ export default [
 			{
 				itemLevelMin: 1600,
 				itemLevelComfort: 1610,
-				gold: 1750,
+				gold: 2000,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1600,
 				itemLevelComfort: 1610,
-				gold: 2500,
+				gold: 3000,
+				resetPeriod: 7
+			}
+		]
+	},
+	{
+		name: '상아탑 싱글',
+		id: 'tower.single',
+		type: 'Breakpoint',
+		breakpoints: [
+			{
+				itemLevelMin: 1600,
+				itemLevelComfort: 1610,
+				gold: 900,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1600,
 				itemLevelComfort: 1610,
-				gold: 3250,
+				gold: 1100,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1600,
+				itemLevelComfort: 1610,
+				gold: 1500,
 				resetPeriod: 7
 			}
 		]
@@ -182,7 +195,7 @@ export default [
 			{
 				itemLevelMin: 1600,
 				itemLevelComfort: 1620,
-				gold: 1750,
+				gold: 1500,
 				resetPeriod: 7
 			},
 			{
@@ -194,7 +207,7 @@ export default [
 			{
 				itemLevelMin: 1600,
 				itemLevelComfort: 1620,
-				gold: 5750,
+				gold: 3500,
 				resetPeriod: 7
 			}
 		]
@@ -207,19 +220,44 @@ export default [
 			{
 				itemLevelMin: 1580,
 				itemLevelComfort: 1590,
-				gold: 1500,
+				gold: 1000,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1580,
 				itemLevelComfort: 1590,
-				gold: 2000,
+				gold: 1800,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1580,
 				itemLevelComfort: 1590,
-				gold: 3000,
+				gold: 2600,
+				resetPeriod: 7
+			}
+		]
+	},
+	{
+		name: '일리아칸 싱글',
+		id: 'akan.single',
+		type: 'Breakpoint',
+		breakpoints: [
+			{
+				itemLevelMin: 1580,
+				itemLevelComfort: 1590,
+				gold: 700,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1580,
+				itemLevelComfort: 1590,
+				gold: 800,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1580,
+				itemLevelComfort: 1590,
+				gold: 1300,
 				resetPeriod: 7
 			}
 		]
@@ -232,19 +270,19 @@ export default [
 			{
 				itemLevelMin: 1580,
 				itemLevelComfort: 1590,
-				gold: 1500,
+				gold: 1000,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1580,
 				itemLevelComfort: 1590,
-				gold: 2000,
+				gold: 1600,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1580,
 				itemLevelComfort: 1590,
-				gold: 3000,
+				gold: 2200,
 				resetPeriod: 7
 			}
 		]
@@ -257,19 +295,44 @@ export default [
 			{
 				itemLevelMin: 1540,
 				itemLevelComfort: 1560,
-				gold: 1000,
+				gold: 800,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1540,
 				itemLevelComfort: 1560,
-				gold: 1500,
+				gold: 1200,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1540,
 				itemLevelComfort: 1560,
-				gold: 2000,
+				gold: 1600,
+				resetPeriod: 7
+			}
+		]
+	},
+	{
+		name: '카양겔 싱글',
+		id: 'kayangel.single',
+		type: 'Breakpoint',
+		breakpoints: [
+			{
+				itemLevelMin: 1540,
+				itemLevelComfort: 1560,
+				gold: 400,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1540,
+				itemLevelComfort: 1560,
+				gold: 500,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1540,
+				itemLevelComfort: 1560,
+				gold: 800,
 				resetPeriod: 7
 			}
 		]
@@ -282,25 +345,25 @@ export default [
 			{
 				itemLevelMin: 1540,
 				itemLevelComfort: 1560,
-				gold: 2000,
+				gold: 1200,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1540,
 				itemLevelComfort: 1560,
-				gold: 2000,
+				gold: 1200,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1550,
 				itemLevelComfort: 1560,
-				gold: 2000,
+				gold: 1200,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1560,
 				itemLevelComfort: 1580,
-				gold: 3000,
+				gold: 2000,
 				resetPeriod: 14
 			}
 		]
@@ -313,51 +376,57 @@ export default [
 			{
 				itemLevelMin: 1490,
 				itemLevelComfort: 1520,
-				gold: 1500,
+				gold: 1000,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1490,
 				itemLevelComfort: 1520,
-				gold: 1500,
+				gold: 1000,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1500,
 				itemLevelComfort: 1520,
-				gold: 1500,
+				gold: 1000,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1520,
 				itemLevelComfort: 1540,
-				gold: 2500,
+				gold: 1600,
 				resetPeriod: 14
 			}
 		]
 	},
 	{
-		name: '쿠크세이튼 하드',
-		id: 'kokou.hard',
+		name: '아브렐슈드 싱글',
+		id: 'abrelshud.single',
 		type: 'Breakpoint',
 		breakpoints: [
 			{
-				itemLevelMin: 1475,
-				itemLevelComfort: 1540,
-				gold: 600,
+				itemLevelMin: 1490,
+				itemLevelComfort: 1520,
+				gold: 400,
 				resetPeriod: 7
 			},
 			{
-				itemLevelMin: 1475,
+				itemLevelMin: 1490,
+				itemLevelComfort: 1520,
+				gold: 500,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1500,
+				itemLevelComfort: 1520,
+				gold: 800,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1520,
 				itemLevelComfort: 1540,
 				gold: 900,
-				resetPeriod: 7
-			},
-			{
-				itemLevelMin: 1475,
-				itemLevelComfort: 1540,
-				gold: 1500,
-				resetPeriod: 7
+				resetPeriod: 14
 			}
 		]
 	}

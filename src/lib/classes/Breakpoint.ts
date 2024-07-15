@@ -48,24 +48,28 @@ export class Breakpoint {
 	bgColor() {
 		if (this.id.endsWith("hard")) return "bg-amber-600";
 		else if (this.id.endsWith("normal")) return "bg-lime-400";
+		else if (this.id.endsWith("single")) return "bg-gray-400";
 		else return "bg-purple-700";
 	}
 
 	borderColor() {
 		if (this.id.endsWith("hard")) return "border-amber-600";
 		else if (this.id.endsWith("normal")) return "border-lime-400";
+		else if (this.id.endsWith("single")) return "border-gray-400";
 		else return "border-purple-700";
 	}
 
 	bgColorDark() {
 		if (this.id.endsWith("hard")) return "dark:bg-amber-200";
 		else if (this.id.endsWith("normal")) return "dark:bg-lime-300";
+		else if (this.id.endsWith("single")) return "dark:bg-gray-200";
 		else return "dark:bg-purple-400";
 	}
 
 	borderColorDark() {
 		if (this.id.endsWith("hard")) return "dark:border-amber-200";
 		else if (this.id.endsWith("normal")) return "dark:border-lime-300";
+		else if (this.id.endsWith("single")) return "dark:border-gray-200";
 		else return "dark:border-purple-400";
 	}
 }

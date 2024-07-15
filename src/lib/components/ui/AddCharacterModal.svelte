@@ -133,7 +133,9 @@
 
                 let dailys: Todo[] = [];
 
-                dailys.push(new Todo(DailyTemplates.find(x => x.name == "카오스 던전")!));
+                if (itemLevel < 1640) dailys.push(new Todo(DailyTemplates.find(x => x.name == "카오스 던전")!));
+                else dailys.push(new Todo(DailyTemplates.find(x => x.name == "쿠르잔 전선")!));
+
                 dailys.push(new Todo(DailyTemplates.find(x => x.name == "에포나 의뢰")!));
                 dailys.push(new Todo(DailyTemplates.find(x => x.name == "가디언 토벌")!));
                 dailys.push(new Todo(DailyTemplates.find(x => x.name == "길드 출석")!));
