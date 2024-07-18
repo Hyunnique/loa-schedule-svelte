@@ -102,19 +102,19 @@ export class Todo {
             if (this.resetNext <= now.getTime()) {
                 if (this.bonus) {
                     for (let i = 0; i < this.countCurrent; i++) {
-                        if (this.id === "dungeon.chaos") {
-                            if (this.bonusCurrent >= 20) this.bonusCurrent -= 20;
-                        }
-                        else if (this.id === "dungeon.chaosnew") {
+                        if (this.id === "dungeon.chaosnew") {
                             if (this.bonusCurrent >= 40) this.bonusCurrent -= 40;
+                        }
+                        else {
+                            if (this.bonusCurrent >= 20) this.bonusCurrent -= 20;
                         }
                     }
 
                     const timeDiff: number = now.getTime() - this.resetNext;
                     const diffPeriod: number = Math.floor(timeDiff / 1000 / 60 / 60 / 24) + 1;
 
-                    if (this.id === "dungeon.chaos") this.bonusCurrent += (diffPeriod * this.countMax - this.countCurrent) * 10;
-                    else if (this.id === "dungeon.chaosnew") this.bonusCurrent += (diffPeriod * this.countMax - this.countCurrent) * 20;
+                    if (this.id === "dungeon.chaosnew") this.bonusCurrent += (diffPeriod * this.countMax - this.countCurrent) * 20;
+                    else this.bonusCurrent += (diffPeriod * this.countMax - this.countCurrent) * 10;
 
                     if (this.bonusCurrent > 200) this.bonusCurrent = 200;
                 }
