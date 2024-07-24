@@ -1,5 +1,43 @@
 export default [
 	{
+		name: '에기르 하드',
+		id: 'egir.hard',
+		type: 'Breakpoint',
+		breakpoints: [
+			{
+				itemLevelMin: 1680,
+				itemLevelComfort: 1685,
+				gold: 9000,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1680,
+				itemLevelComfort: 1685,
+				gold: 18500,
+				resetPeriod: 7
+			}
+		]
+	},
+	{
+		name: '에기르 노말',
+		id: 'egir.normal',
+		type: 'Breakpoint',
+		breakpoints: [
+			{
+				itemLevelMin: 1660,
+				itemLevelComfort: 1670,
+				gold: 7500,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1660,
+				itemLevelComfort: 1670,
+				gold: 15500,
+				resetPeriod: 7
+			}
+		]
+	},
+	{
 		name: '베히모스 노말',
 		id: 'behemoth.normal',
 		type: 'Breakpoint',

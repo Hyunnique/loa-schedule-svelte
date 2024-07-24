@@ -116,7 +116,8 @@ export class Todo {
                     if (this.id === "dungeon.chaosnew") this.bonusCurrent += (diffPeriod * this.countMax - this.countCurrent) * 20;
                     else this.bonusCurrent += (diffPeriod * this.countMax - this.countCurrent) * 10;
 
-                    if (this.bonusCurrent > 200) this.bonusCurrent = 200;
+                    if ((this.id === "dungeon.chaos" || this.id === "dungeon.chaosnew") && this.bonusCurrent > 200) this.bonusCurrent = 200;
+                    else if (this.bonusCurrent > 100) this.bonusCurrent = 100;
                 }
 
                 this.countCurrent = 0;
