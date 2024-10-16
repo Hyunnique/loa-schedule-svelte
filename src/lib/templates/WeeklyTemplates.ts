@@ -1,7 +1,45 @@
 export default [
 	{
-		name: '에기르 하드',
-		id: 'egir.hard',
+		name: '2막: 아브렐슈드 하드',
+		id: 'kazeros.abrelshud.hard',
+		type: 'Breakpoint',
+		breakpoints: [
+			{
+				itemLevelMin: 1690,
+				itemLevelComfort: 1695,
+				gold: 10000,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1690,
+				itemLevelComfort: 1695,
+				gold: 20500,
+				resetPeriod: 7
+			}
+		]
+	},
+	{
+		name: '2막: 아브렐슈드 노말',
+		id: 'kazeros.abrelshud.normal',
+		type: 'Breakpoint',
+		breakpoints: [
+			{
+				itemLevelMin: 1670,
+				itemLevelComfort: 1680,
+				gold: 8500,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1670,
+				itemLevelComfort: 1680,
+				gold: 16500,
+				resetPeriod: 7
+			}
+		]
+	},
+	{
+		name: '1막: 에기르 하드',
+		id: 'kazeros.egir.hard',
 		type: 'Breakpoint',
 		breakpoints: [
 			{
@@ -19,8 +57,8 @@ export default [
 		]
 	},
 	{
-		name: '에기르 노말',
-		id: 'egir.normal',
+		name: '1막: 에기르 노말',
+		id: 'kazeros.egir.normal',
 		type: 'Breakpoint',
 		breakpoints: [
 			{
@@ -57,8 +95,8 @@ export default [
 		]
 	},
 	{
-		name: '에키드나 하드',
-		id: 'echidna.hard',
+		name: '서막: 에키드나 하드',
+		id: 'kazeros.echidna.hard',
 		type: 'Breakpoint',
 		breakpoints: [
 			{
@@ -76,8 +114,8 @@ export default [
 		]
 	},
 	{
-		name: '에키드나 노말',
-		id: 'echidna.normal',
+		name: '서막: 에키드나 노말',
+		id: 'kazeros.echidna.normal',
 		type: 'Breakpoint',
 		breakpoints: [
 			{
