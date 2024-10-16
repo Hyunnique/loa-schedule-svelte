@@ -86,12 +86,11 @@
     }
 
     function getLevelColor(level: number) {
-        if (level >= 1630) return "red";
-        else if (level >= 1610) return "indigo";
-        else if (level >= 1600) return "pink";
-        else if (level >= 1580) return "green";
-        else if (level >= 1540) return "yellow";
-        else if (level >= 1490) return "purple";
+        if (level >= 1690) return "blue";
+        else if (level >= 1660) return "green";
+        else if (level >= 1640) return "pink";
+        else if (level >= 1600) return "yellow";
+        else if (level >= 1540) return "purple";
         else return "dark";
     }
 /*
