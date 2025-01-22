@@ -56,7 +56,7 @@
                 <P
                         class="flex items-center gap-1 text-right font-bold text-md"
                 >
-                    {#if gold > 0}
+                    {#if gold > 0 && data.rewardable}
                         <DatabaseOutline class="inline-block w-2.5 h-2.5 text-yellow-400 dark:text-yellow-200" />
                         <Span class="text-yellow-400 dark:text-yellow-200">{ gold }</Span>
                     {:else}

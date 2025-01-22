@@ -19,6 +19,7 @@ interface ITodo {
     resetPeriod?: number;
     resetNext?: number;
 
+    rewardable?: boolean;
     enableConditions?: EnableConditions;
 
     breakpoints?: Breakpoint[];
@@ -41,6 +42,7 @@ export class Todo {
     resetPeriod: number;
     resetNext: number;
 
+    rewardable: boolean;
     enableConditions: EnableConditions;
 
     breakpoints: Breakpoint[];
@@ -57,6 +59,8 @@ export class Todo {
 
         this.countCurrent = params?.countCurrent ?? 0;
         this.countMax = params?.countMax ?? 1;
+
+        this.rewardable = params?.rewardable ?? true;
 
         if (params?.enableConditions != null) {
             this.enableConditions = new EnableConditions(params.enableConditions);

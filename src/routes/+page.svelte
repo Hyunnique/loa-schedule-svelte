@@ -52,7 +52,7 @@
 		for (let character of characters) {
 			for (let todoGroup of character.todoGroups) {
 				for (let todo of todoGroup) {
-					if (todo.type === "Breakpoint") {
+					if (todo.type === "Breakpoint" && todo.rewardable) {
 						for (let breakpoint of todo.breakpoints) {
 							if (breakpoint.done) earnedGold += breakpoint.gold;
 							totalGold += breakpoint.gold;
@@ -214,6 +214,7 @@
 				bonusCurrent: parseInt(data.detail.bonusCurrent),
 				countMax: parseInt(data.detail.countMax),
 				resetPeriod: parseInt(data.detail.resetPeriod),
+				rewardable: data.detail.rewardable,
 				enableConditions: new EnableConditions({
 					bonusMin: parseInt(data.detail.enableConditions.bonusMin),
 					dayType: data.detail.dayType

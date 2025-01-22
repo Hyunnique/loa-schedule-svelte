@@ -27,6 +27,7 @@
         bonusCurrent: number;
         countMax: number;
         resetPeriod: number;
+        rewardable: boolean;
         enableConditions: { // TODO: EnableConditions는 저장하지 않아도 reactive로 값이 변경되는 문제 해결하기
             bonusMin: number;
             dayType: number[];
@@ -61,6 +62,7 @@
                 <option value="Breakpoint">관문</option>
             </Select>
         </div>
+        <Checkbox bind:checked={ formData.rewardable }>골드 흭득 여부</Checkbox>
         <Checkbox bind:checked={ formData.important }>중요</Checkbox>
         <FloatingLabelInput type="text" style="outlined" bind:value={ formData.memo } label="메모" />
 
