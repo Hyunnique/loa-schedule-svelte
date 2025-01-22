@@ -1,6 +1,56 @@
 export default [
 	{
-		name: '2막: 아브렐슈드 하드',
+		name: '모르둠 하드',
+		id: 'kazeros.mordum.hard',
+		type: 'Breakpoint',
+		breakpoints: [
+			{
+				itemLevelMin: 1700,
+				itemLevelComfort: 1705,
+				gold: 7000,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1700,
+				itemLevelComfort: 1705,
+				gold: 11000,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1700,
+				itemLevelComfort: 1705,
+				gold: 16000,
+				resetPeriod: 7
+			}
+		]
+	},
+	{
+		name: '모르둠 노말',
+		id: 'kazeros.mordum.normal',
+		type: 'Breakpoint',
+		breakpoints: [
+			{
+				itemLevelMin: 1680,
+				itemLevelComfort: 1690,
+				gold: 6000,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1680,
+				itemLevelComfort: 1690,
+				gold: 9500,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1680,
+				itemLevelComfort: 1690,
+				gold: 12500,
+				resetPeriod: 7
+			}
+		]
+	},
+	{
+		name: '아브렐슈드 하드',
 		id: 'kazeros.abrelshud.hard',
 		type: 'Breakpoint',
 		breakpoints: [
@@ -19,7 +69,7 @@ export default [
 		]
 	},
 	{
-		name: '2막: 아브렐슈드 노말',
+		name: '아브렐슈드 노말',
 		id: 'kazeros.abrelshud.normal',
 		type: 'Breakpoint',
 		breakpoints: [
@@ -38,7 +88,7 @@ export default [
 		]
 	},
 	{
-		name: '1막: 에기르 하드',
+		name: '에기르 하드',
 		id: 'kazeros.egir.hard',
 		type: 'Breakpoint',
 		breakpoints: [
@@ -57,7 +107,7 @@ export default [
 		]
 	},
 	{
-		name: '1막: 에기르 노말',
+		name: '에기르 노말',
 		id: 'kazeros.egir.normal',
 		type: 'Breakpoint',
 		breakpoints: [
@@ -83,19 +133,19 @@ export default [
 			{
 				itemLevelMin: 1640,
 				itemLevelComfort: 1650,
-				gold: 7000,
+				gold: 6000,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1640,
 				itemLevelComfort: 1650,
-				gold: 14500,
+				gold: 12500,
 				resetPeriod: 7
 			}
 		]
 	},
 	{
-		name: '서막: 에키드나 하드',
+		name: '에키드나 하드',
 		id: 'kazeros.echidna.hard',
 		type: 'Breakpoint',
 		breakpoints: [
@@ -114,7 +164,7 @@ export default [
 		]
 	},
 	{
-		name: '서막: 에키드나 노말',
+		name: '에키드나 노말',
 		id: 'kazeros.echidna.normal',
 		type: 'Breakpoint',
 		breakpoints: [
@@ -140,25 +190,25 @@ export default [
 			{
 				itemLevelMin: 1630,
 				itemLevelComfort: 1635,
-				gold: 5000,
+				gold: 3500,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1630,
 				itemLevelComfort: 1635,
-				gold: 6000,
+				gold: 4500,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1630,
 				itemLevelComfort: 1635,
-				gold: 9000,
+				gold: 7500,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1630,
 				itemLevelComfort: 1640,
-				gold: 21000,
+				gold: 8000,
 				resetPeriod: 14
 			}
 		]
@@ -171,19 +221,19 @@ export default [
 			{
 				itemLevelMin: 1610,
 				itemLevelComfort: 1620,
-				gold: 3500,
+				gold: 2500,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1610,
 				itemLevelComfort: 1620,
-				gold: 4000,
+				gold: 3000,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1610,
 				itemLevelComfort: 1620,
-				gold: 5500,
+				gold: 4500,
 				resetPeriod: 7
 			}
 		]
@@ -196,19 +246,19 @@ export default [
 			{
 				itemLevelMin: 1620,
 				itemLevelComfort: 1630,
+				gold: 2000,
+				resetPeriod: 7
+			},
+			{
+				itemLevelMin: 1620,
+				itemLevelComfort: 1630,
 				gold: 3000,
 				resetPeriod: 7
 			},
 			{
 				itemLevelMin: 1620,
 				itemLevelComfort: 1630,
-				gold: 4000,
-				resetPeriod: 7
-			},
-			{
-				itemLevelMin: 1620,
-				itemLevelComfort: 1630,
-				gold: 6000,
+				gold: 5500,
 				resetPeriod: 7
 			}
 		]
